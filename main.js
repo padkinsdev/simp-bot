@@ -29,7 +29,7 @@ client.on('message', (message) => {
     }
 });
 
-cron.schedule("30 * * * * *", () => {
+cron.schedule("* * 6 * * *", () => {
     let embed = new discord.MessageEmbed()
     .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
     .setColor(genRandHex())
