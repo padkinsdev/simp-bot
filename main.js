@@ -8,9 +8,9 @@ const simpRecipients = [
     "293841274639745025",
     "215249462665281536",
     "359196366171537410",
-    "359196366171537410",
     "618320455287177241",
-    "204035386689716225"
+    "204035386689716225",
+    "317377671598178304"
 ]
 
 client.on('ready', () => {
@@ -22,7 +22,7 @@ client.on('message', (message) => {
         let embed = new discord.MessageEmbed()
         .setDescription(`Hmm...you should simp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
         .setColor(genRandHex())
-        .setThumbnail(message.author.avatarURL())
+        .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Simp On Demand");
         message.channel.send(embed);
     }
@@ -32,10 +32,10 @@ cron.schedule("* * 1 * * *", () => {
     let embed = new discord.MessageEmbed()
     .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
     .setColor(genRandHex())
-    .setThumbnail(client.user.avatarURL())
+    .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
     .setTitle("Wake And Bake, It's Simp Time!");
     client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
-})
+});
 
 client.login(config["token"]);
 
