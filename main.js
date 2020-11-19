@@ -1,7 +1,7 @@
 const discord = require('discord.js');
 const config = require('./config.json');
 
-var simpDelay = 15000;
+var simpDelay = 3600000;
 const client = new discord.Client();
 const simpRecipients = [
     "621357020808740924",
@@ -33,11 +33,6 @@ client.on('message', (message) => {
         .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Simp On Demand");
         message.channel.send(embed);
-    } else if (message.content.toLowerCase() == "die") {
-        message.channel.send("Terminating...");
-        client.destroy();
-    } else if (message.content.toLowerCase().startsWith("change_time: ")) {
-        simpDelay = parseInt(message.content.split(' ')[1]);
     }
 });
 
