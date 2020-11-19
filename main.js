@@ -15,6 +15,14 @@ const simpRecipients = [
 
 client.on('ready', () => {
     console.log("I'm alive!");
+    setInterval(() => {
+        let embed = new discord.MessageEmbed()
+        .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
+        .setColor(genRandHex())
+        .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+        .setTitle("Wake And Bake, It's Simp Time!");
+        client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
+    }, simpDelay);
 });
 
 client.on('message', (message) => {
@@ -32,15 +40,6 @@ client.on('message', (message) => {
         simpDelay = parseInt(message.content.split(' ')[1]);
     }
 });
-
-setInterval(() => {
-    let embed = new discord.MessageEmbed()
-    .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
-    .setColor(genRandHex())
-    .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-    .setTitle("Wake And Bake, It's Simp Time!");
-    client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
-}, simpDelay);
 
 client.login(config["token"]);
 
