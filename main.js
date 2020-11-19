@@ -25,6 +25,8 @@ client.on('message', (message) => {
         .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Simp On Demand");
         message.channel.send(embed);
+    } else if (message.content.toLowerCase() == "die") {
+        client.logout();
     }
 });
 
