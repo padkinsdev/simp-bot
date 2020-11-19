@@ -40,7 +40,7 @@ setInterval(() => {
     .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
     .setTitle("Wake And Bake, It's Simp Time!");
     client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
-}, , simpDelay);
+}, simpDelay);
 
 client.login(config["token"]);
 
