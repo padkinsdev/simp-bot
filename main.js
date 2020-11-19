@@ -58,7 +58,7 @@ process.on('unhandledRejection', (reason) => {
     console.clear();
     console.log(`Unhandle rejection: ${reason}`)
     client.destroy();
-});
+}, simpDelay);
 
 process.on('uncaughtException', (err) => {
     console.clear();
