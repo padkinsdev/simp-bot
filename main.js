@@ -11,7 +11,7 @@ const simpRecipients = [
     "618320455287177241",
     "204035386689716225",
     "317377671598178304"
-]
+];
 
 client.on('ready', () => {
     console.log("I'm alive!");
@@ -54,11 +54,13 @@ function genRandHex() {
 }
 
 process.on('unhandledRejection', (reason) => {
+    console.clear();
     console.log(`Unhandle rejection: ${reason}`)
     client.destroy();
 });
 
 process.on('uncaughtException', (err) => {
+    console.clear();
     console.log(`Unhandled Exception: ${err}`);
     client.destroy();
 });
