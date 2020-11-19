@@ -26,7 +26,7 @@ client.on('ready', () => {
 });
 
 client.on('message', (message) => {
-    if (message.content.toLowerCase() == "who should i simp for?") {
+    if (message.content.toLowerCase() == "who to simp for?") {
         let embed = new discord.MessageEmbed()
         .setDescription(`Hmm...you should simp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
         .setColor(genRandHex())
