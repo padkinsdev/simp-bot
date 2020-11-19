@@ -26,7 +26,7 @@ client.on('message', (message) => {
         .setTitle("Simp On Demand");
         message.channel.send(embed);
     } else if (message.content.toLowerCase() == "die") {
-        client.logout();
+        client.destroy();
     }
 });
 
