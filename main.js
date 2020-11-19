@@ -1,7 +1,7 @@
 const discord = require('discord.js');
 const config = require('./config.json');
-const cron = require('node-cron');
 
+var simpDelay = 15000;
 const client = new discord.Client();
 const simpRecipients = [
     "621357020808740924",
@@ -26,13 +26,14 @@ client.on('message', (message) => {
         .setTitle("Simp On Demand");
         message.channel.send(embed);
     } else if (message.content.toLowerCase() == "die") {
-        console.log("Terminating...");
+        message.channel.send("Terminating...");
         client.destroy();
-        console.log("Terminated");
+    } else if (message.content.toLowerCase().startsWith("change_time: ")) {
+        simpDelay = parseInt(message.content.split(' ')[1]);
     }
 });
 
-cron.schedule("* * 1 * * *", () => {
+setInterval(() => {
     let embed = new discord.MessageEmbed()
     .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
     .setColor(genRandHex())
