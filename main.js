@@ -61,4 +61,4 @@ process.on('unhandledRejection', (reason) => {
 process.on('uncaughtException', (err) => {
     console.log(`Unhandled Exception: ${err}`);
     client.destroy();
-})
+});
