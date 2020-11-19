@@ -19,7 +19,6 @@ client.on('ready', () => {
 
 client.on('message', (message) => {
     if (message.content.toLowerCase() == "who should i simp for?") {
-        console.log(message.author.avatarURL());
         let embed = new discord.MessageEmbed()
         .setDescription(`Hmm...you should simp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
         .setColor(genRandHex())
@@ -29,7 +28,7 @@ client.on('message', (message) => {
     }
 });
 
-cron.schedule("* * 6 * * *", () => {
+cron.schedule("* * 1 * * *", () => {
     let embed = new discord.MessageEmbed()
     .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
     .setColor(genRandHex())
