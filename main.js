@@ -50,3 +50,13 @@ function genRandHex() {
     }
     return '0x' + result;
 }
+
+process.on('unhandledRejection', (reason) => {
+    console.log(`Unhandle rejection: ${reason}`)
+    client.destroy();
+});
+
+process.on('uncaughtException', (err) => {
+    console.log(`Unhandled Exception: ${err}`);
+    client.destroy();
+})
