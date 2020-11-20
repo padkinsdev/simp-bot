@@ -38,7 +38,7 @@ const fightLines = [
     "The sexual tension is *overwhelming*",
     "Fight you? Please. You wish I would.",
     "I am but a simple bot, tending to my cyclomatic complexity :pensive:"
-]
+];
 /*
 const affirmationLines = [
     "You have a lot more control over your life than you might think",
@@ -57,7 +57,7 @@ client.on('ready', () => {
 });
 
 client.on('message', (message) => {
-    if (message.content.toLowerCase() == "who to simp for?") {
+    if (message.content.toLowerCase().includes("simp") && message.content.toLowerCase().includes("?")) {
         let embed = new discord.MessageEmbed()
         .setDescription(`Hmm...you should simp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
         .setColor(genRandHex())
