@@ -28,6 +28,17 @@ const simpRecipients = [
     "324216151628447744", // Finnn
     "763601080289591317" // Scorpius
 ];
+
+const fightLines = [
+    "I hope you're ready to get your ass whooped by a bot :angry:",
+    "I've been wanting to try out my new knuckledusters :smiling_imp:",
+    "Is this...love?",
+    "LET'S GOOOOOOOOOOOOOOOOOOO",
+    "How about a pleasant game of bridge instead? :face_with_monocle:",
+    "The sexual tension is *overwhelming*",
+    "Fight you? Please. You wish I would.",
+    "I am but a simple bot, tending to my cyclomatic complexity :pensive:"
+]
 /*
 const affirmationLines = [
     "You have a lot more control over your life than you might think",
@@ -53,6 +64,15 @@ client.on('message', (message) => {
         .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Simp On Demand");
         message.channel.send(embed);
+    } else if (message.channel.id == config["simp-channel"]) {
+        if (message.content.toLowerCase().includes("fight") && message.content.toLowerCase().includes("bot")) {
+            let embed = new discord.MessageEmbed()
+            .setDescription(fightLines[randInt(0, fightLines.length)])
+            .setColor(genRandHex())
+            .setThumbnail("https://media1.tenor.com/images/b13ba77a7a858ac42d40dc7d03d6f226/tenor.gif")
+            .setTitle("You Wanna Fight?");
+            message.channel.send(embed);
+        }
     }
 });
 
@@ -66,6 +86,10 @@ function genRandHex() {
         result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return '0x' + result;
+}
+
+function randInt(min, max){
+    return Math.floor(Math.random() * max-min) + min;
 }
 
 process.on('unhandledRejection', (reason) => {
