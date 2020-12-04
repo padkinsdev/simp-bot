@@ -76,6 +76,12 @@ client.on('message', (message) => {
             .setTitle("You Wanna Fight?");
             message.channel.send(embed);
         }
+    } else if (message.content.includes("give avatar")) {
+        if (message.mentions.users.array().length == 0) {
+            message.channel.send(message.author.displayAvatarURL());
+        } else {
+            message.channel.send(message.mentions.users.array()[0].displayAvatarURL());
+        }
     }
 });
 
