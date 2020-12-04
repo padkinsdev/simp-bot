@@ -1,7 +1,7 @@
 const discord = require('discord.js');
 const config = require('./config.json');
 
-var simpDelay = 3600000;
+var simpDelay = 21600000;
 const client = new discord.Client();
 const simpRecipients = [
     "621357020808740924", // Neptune
