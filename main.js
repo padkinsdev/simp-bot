@@ -78,9 +78,9 @@ client.on('message', (message) => {
         }
     } else if (message.content.includes("give avatar")) {
         if (message.mentions.users.array().length == 0) {
-            message.channel.send(message.author.avatarURL());
+            message.channel.send(message.author.avatarURL({ size: 4096 }));
         } else {
-            message.channel.send(message.mentions.users.array()[0].avatarURL());
+            message.channel.send(message.mentions.users.array()[0].avatarURL({ size: 4096 }));
         }
     }
 });
