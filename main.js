@@ -1,7 +1,7 @@
 const discord = require('discord.js');
 const config = require('./config.json');
 
-var simpDelay = 21600000;
+const simpDelay = 21600000/2;
 const client = new discord.Client();
 const simpRecipients = [
     "621357020808740924", // Neptune
@@ -41,20 +41,33 @@ const fightLines = [
     "Fight you? Please. You wish I would.",
     "I am but a simple bot, tending to my cyclomatic complexity :pensive:"
 ];
-/*
-const affirmationLines = [
-    "You have a lot more control over your life than you might think",
-    "You are beautiful"
-]*/
+
 client.on('ready', () => {
     console.log("I'm alive!");
     setInterval(() => {
+        client.guilds.resolve(config['simp-server']).members.fetch()
+        .then((members) => {
+            let embed = new discord.MessageEmbed()
+            .setColor(genRandHex())
+            .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+            .setTitle("Wake And Bake, It's Simp Time!");
+            members = members.array();
+            let userToSimp = members[Math.floor(Math.random() * members.length)];
+            if (simpRecipients.includes(userToSimp.id)) {
+                embed.setDescription(`Today's task:\nSimp for <@!${userToSimp.id}>`);
+            } else {
+                embed.setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>\n\nP.S.: Tell Kate to come fix me :medical_symbol:`);
+            }
+            client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
+        });
+        /*
         let embed = new discord.MessageEmbed()
         .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
         .setColor(genRandHex())
         .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Wake And Bake, It's Simp Time!");
         client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
+        */
     }, simpDelay);
 });
 
