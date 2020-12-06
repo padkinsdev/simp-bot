@@ -67,6 +67,11 @@ client.on('ready', () => {
             })
             .then((dmChannel) => {
                 dmChannel.send(`Error log: Failed to grab random user: ${reason}`);
+                let embed = new discord.MessageEmbed()
+                .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
+                .setColor(genRandHex())
+                .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+                .setTitle("Wake And Bake, It's Simp Time!");
             })
             .catch((dmFailReason) => {
                 console.log(`Failed to fetch random member: ${reason}\nFailed to create DM channel with creator: ${dmFailReason}`);
@@ -106,6 +111,9 @@ client.on('message', (message) => {
         } else {
             message.channel.send(message.mentions.users.array()[0].avatarURL({ size: 4096 }));
         }
+    } else if (message.content == "stop!") {
+        message.channel.send("Sorry!");
+        client.destroy();
     }
 });
 
