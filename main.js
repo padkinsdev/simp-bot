@@ -59,6 +59,18 @@ client.on('ready', () => {
                 embed.setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>\n\nP.S.: Tell Kate to come fix me :medical_symbol:`);
             }
             client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
+        })
+        .catch((reason) => {
+            client.guilds.resolve(config['simp-server']).members.fetch(config['creator'])
+            .then((user) => {
+                return user.createDM();
+            })
+            .then((dmChannel) => {
+                dmChannel.send(`Error log: Failed to grab random user: ${reason}`);
+            })
+            .catch((dmFailReason) => {
+                console.log(`Failed to fetch random member: ${reason}\nFailed to create DM channel with creator: ${dmFailReason}`);
+            });
         });
         /*
         let embed = new discord.MessageEmbed()
