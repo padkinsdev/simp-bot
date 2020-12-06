@@ -72,6 +72,7 @@ client.on('ready', () => {
                 .setColor(genRandHex())
                 .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
                 .setTitle("Wake And Bake, It's Simp Time!");
+                client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
             })
             .catch((dmFailReason) => {
                 console.log(`Failed to fetch random member: ${reason}\nFailed to create DM channel with creator: ${dmFailReason}`);
