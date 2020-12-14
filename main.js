@@ -18,7 +18,7 @@ const simpRecipients = [
     "223118324475625472", // HaydenGotBored
     "143077292938100737", // Ligondy
     "402615865620561920", // Wretched Brat
-    "360130321691443200", // CannibalKin
+    //"360130321691443200", // CannibalKin
     "249123434645159936", // Orion
     "572283494193954817", // Jupiter/Nikkie/Nikhil
     "486341657869156353", // Mars
