@@ -1,7 +1,7 @@
 const discord = require('discord.js');
 const config = require('./config.json');
 
-const simpDelay = 21600000/2;
+const simpDelay = 3600000;
 const client = new discord.Client();
 const simpRecipients = [
     "621357020808740924", // Neptune
@@ -45,39 +45,43 @@ const fightLines = [
 client.on('ready', () => {
     console.log("I'm alive!");
     setInterval(() => {
+        let cache = "";
+        client.guilds.resolve(config['simp-server']).members.cache.array().forEach((val) => {
+            cache += `${val.nickname}\n`;
+        });
         client.guilds.resolve(config['simp-server']).members.fetch()
-        .then((members) => {
-            let embed = new discord.MessageEmbed()
-            .setColor(genRandHex())
-            .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-            .setTitle("Wake And Bake, It's Simp Time!");
-            members = members.array();
-            let userToSimp = members[Math.floor(Math.random() * members.length)];
-            if (simpRecipients.includes(userToSimp.id)) {
-                embed.setDescription(`Today's task:\nSimp for <@!${userToSimp.id}>`);
-            } else {
-                embed.setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>\n\nP.S.: Tell Kate to come fix me :medical_symbol:`);
-            }
-            client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
-        })
-        .catch((reason) => {
-            client.guilds.resolve(config['simp-server']).members.fetch(config['creator'])
-            .then((user) => {
-                return user.createDM();
-            })
-            .then((dmChannel) => {
-                dmChannel.send(`Error log: Failed to grab random user: ${reason}`);
+            .then((members) => {
                 let embed = new discord.MessageEmbed()
-                .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
-                .setColor(genRandHex())
-                .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-                .setTitle("Wake And Bake, It's Simp Time!");
+                    .setColor(genRandHex())
+                    .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+                    .setTitle("Wake And Bake, It's Simp Time!");
+                members = members.array();
+                let userToSimp = members[Math.floor(Math.random() * members.length)];
+                if (simpRecipients.includes(userToSimp.id)) {
+                    embed.setDescription(`Today's task:\nSimp for <@!${userToSimp.id}>`);
+                } else {
+                    embed.setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>\n\nP.S.: Tell Kate to come fix me :medical_symbol:`);
+                }
                 client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
             })
-            .catch((dmFailReason) => {
-                console.log(`Failed to fetch random member: ${reason}\nFailed to create DM channel with creator: ${dmFailReason}`);
+            .catch((reason) => {
+                client.guilds.resolve(config['simp-server']).members.fetch(config['creator'])
+                    .then((user) => {
+                        return user.createDM();
+                    })
+                    .then((dmChannel) => {
+                        dmChannel.send(`Error log: Failed to grab random user: ${reason}\nCache:\n${cache}`);
+                        let embed = new discord.MessageEmbed()
+                            .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
+                            .setColor(genRandHex())
+                            .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+                            .setTitle("Wake And Bake, It's Simp Time!");
+                        client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
+                    })
+                    .catch((dmFailReason) => {
+                        console.log(`Failed to fetch random member: ${reason}\nFailed to create DM channel with creator: ${dmFailReason}`);
+                    });
             });
-        });
         /*
         let embed = new discord.MessageEmbed()
         .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
@@ -92,18 +96,18 @@ client.on('ready', () => {
 client.on('message', (message) => {
     if (message.content.toLowerCase().includes("simp") && message.content.toLowerCase().includes("?")) {
         let embed = new discord.MessageEmbed()
-        .setDescription(`Hmm...you should simp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
-        .setColor(genRandHex())
-        .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-        .setTitle("Simp On Demand");
+            .setDescription(`Hmm...you should simp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
+            .setColor(genRandHex())
+            .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+            .setTitle("Simp On Demand");
         message.channel.send(embed);
     } else if (message.channel.id == config["simp-channel"]) {
         if (message.content.toLowerCase().includes("fight") && message.content.toLowerCase().includes("bot")) {
             let embed = new discord.MessageEmbed()
-            .setDescription(fightLines[randInt(0, fightLines.length)])
-            .setColor(genRandHex())
-            .setThumbnail("https://media1.tenor.com/images/b13ba77a7a858ac42d40dc7d03d6f226/tenor.gif")
-            .setTitle("You Wanna Fight?");
+                .setDescription(fightLines[randInt(0, fightLines.length)])
+                .setColor(genRandHex())
+                .setThumbnail("https://media1.tenor.com/images/b13ba77a7a858ac42d40dc7d03d6f226/tenor.gif")
+                .setTitle("You Wanna Fight?");
             message.channel.send(embed);
         }
     } else if (message.content.includes("give avatar")) {
@@ -130,8 +134,8 @@ function genRandHex() {
     return '0x' + result;
 }
 
-function randInt(min, max){
-    return Math.floor(Math.random() * max-min) + min;
+function randInt(min, max) {
+    return Math.floor(Math.random() * max - min) + min;
 }
 
 process.on('unhandledRejection', (reason) => {
