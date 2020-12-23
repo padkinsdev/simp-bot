@@ -95,7 +95,7 @@ client.on('ready', () => {
             hourCounter = 0;
             let max;
             let leaderboard = "Name\tMessages sent\n";
-            while (userMsgCount.size() > 0) {
+            while (userMsgCount.size > 0) {
                 max = findMapMaxValue();
                 leaderboard += "`" + targetServer.members.resolve(max.id).nickname + "`\t`" + max.messages + "`\n";
                 userMsgCount.delete(max.id);
@@ -159,7 +159,7 @@ function randInt(min, max) {
 }
 
 function findMapMaxValue() {
-    if (userMsgCount.size() < 1) {
+    if (userMsgCount.size < 1) {
         return null;
     }
     let maxEntry = {
