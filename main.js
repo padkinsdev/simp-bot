@@ -44,10 +44,11 @@ const fightLines = [
 
 var userMsgCount = new Map();
 var hourCounter = 0;
-var targetServer = client.guilds.resolve(config["simp-server"]);
-let simpChannel = targetServer.channels.resolve(config["simp-channel"]);
+var targetServer, simpChannel;
 
 client.on('ready', () => {
+    targetServer = client.guilds.resolve(config["simp-server"]);
+    simpChannel = targetServer.channels.resolve(config["simp-channel"]);
     console.log("I'm alive!");
     setInterval(() => {
         hourCounter++;
