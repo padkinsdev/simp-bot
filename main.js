@@ -1,7 +1,7 @@
 const discord = require('discord.js');
 const config = require('./config.json');
 
-const simpDelay = 3600000 * 3;
+const simpDelay = 3600000;
 const client = new discord.Client();
 const simpRecipients = [
     "621357020808740924", // Neptune
@@ -42,62 +42,76 @@ const fightLines = [
     "I am but a simple bot, tending to my cyclomatic complexity :pensive:"
 ];
 
-var usersSpoken = [];
+var userMsgCount = new Map();
+var hourCounter = 0;
+var targetServer = client.guilds.resolve(config["simp-server"]);
+let simpChannel = targetServer.channels.resolve(config["simp-channel"]);
 
 client.on('ready', () => {
     console.log("I'm alive!");
     setInterval(() => {
-        let cache = "";
-        client.guilds.resolve(config['simp-server']).members.cache.array().forEach((val) => {
-            cache += `${val.nickname}, `;
-        });
-        client.guilds.resolve(config['simp-server']).members.fetch()
-            .then((members) => {
-                let embed = new discord.MessageEmbed()
-                    .setColor(genRandHex())
-                    .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-                    .setTitle("Wake And Bake, It's Simp Time!");
-                members = members.array();
-                let userToSimp = members[Math.floor(Math.random() * members.length)];
-                if (simpRecipients.includes(userToSimp.id)) {
-                    embed.setDescription(`Today's task:\nSimp for <@!${userToSimp.id}>`);
-                } else {
-                    embed.setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>\n\nP.S.: Tell Kate to come fix me :medical_symbol:`);
-                }
-                client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
-            })
-            .catch((reason) => {
-                client.guilds.resolve(config['simp-server']).members.fetch(config['creator'])
-                    .then((user) => {
-                        return user.createDM();
-                    })
-                    .then((dmChannel) => {
-                        dmChannel.send(`Error log: Failed to grab random user: ${reason}\nCache:\n${cache}\nSpoken Users:\n${usersSpoken}`);
-                        let embed = new discord.MessageEmbed()
-                            .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
-                            .setColor(genRandHex())
-                            .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-                            .setTitle("Wake And Bake, It's Simp Time!");
-                        client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
-                    })
-                    .catch((dmFailReason) => {
-                        console.log(`Failed to fetch random member: ${reason}\nFailed to create DM channel with creator: ${dmFailReason}`);
-                    });
+        hourCounter++;
+        if (hourCounter % 3 == 0) {
+            let cache = "";
+            client.guilds.resolve(config['simp-server']).members.cache.array().forEach((val) => {
+                cache += `${val.nickname}, `;
             });
-        /*
-        let embed = new discord.MessageEmbed()
-        .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
-        .setColor(genRandHex())
-        .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-        .setTitle("Wake And Bake, It's Simp Time!");
-        client.guilds.resolve(config["simp-server"]).channels.resolve(config["simp-channel"]).send(embed);
-        */
+            client.guilds.resolve(config['simp-server']).members.fetch()
+                .then((members) => {
+                    let embed = new discord.MessageEmbed()
+                        .setColor(genRandHex())
+                        .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+                        .setTitle("Wake And Bake, It's Simp Time!");
+                    members = members.array();
+                    let userToSimp = members[Math.floor(Math.random() * members.length)];
+                    if (simpRecipients.includes(userToSimp.id)) {
+                        embed.setDescription(`Today's task:\nSimp for ${targetServer.members.resolve(userToSimp.id)}`);
+                    } else {
+                        embed.setDescription(`Today's task:\nSimp for <@!${targetServer.members.resolve(simpRecipients[Math.floor(Math.random() * simpRecipients.length)])}>\n\nP.S.: Tell Kate to come fix me :medical_symbol:`);
+                    }
+                    simpChannel.send(embed);
+                })
+                .catch((reason) => {
+                    client.guilds.resolve(config['simp-server']).members.fetch(config['creator'])
+                        .then((user) => {
+                            return user.createDM();
+                        })
+                        .then((dmChannel) => {
+                            dmChannel.send(`Error log: Failed to grab random user: ${reason}\nCache:\n${cache}`);
+                            let embed = new discord.MessageEmbed()
+                                .setDescription(`Today's task:\nSimp for <@!${targetServer.members.resolve(simpRecipients[Math.floor(Math.random() * simpRecipients.length)])}>`)
+                                .setColor(genRandHex())
+                                .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+                                .setTitle("Wake And Bake, It's Simp Time!");
+                            simpChannel.send(embed);
+                        })
+                        .catch((dmFailReason) => {
+                            console.log(`Failed to fetch random member: ${reason}\nFailed to create DM channel with creator: ${dmFailReason}`);
+                        });
+                });
+        }
+        if (hourCounter % 2 == 0) {
+            hourCounter = 0;
+            let max;
+            let leaderboard = "Name\tMessages sent\n";
+            while (userMsgCount.size() > 0) {
+                max = findMapMaxValue();
+                leaderboard += "`" + targetServer.members.resolve(max.id).nickname + "`\t`" + max.messages + "`\n";
+                userMsgCount.delete(max.id);
+            }
+            let embed = new discord.MessageEmbed()
+                .setDescription(leaderboard)
+                .setColor(genRandHex())
+                .setThumbnail("https://i2.wp.com/pa1.narvii.com/6119/bd51869c9e3bb834571359421c78495c421e7b03_hq.gif")
+                .setTitle("Leaderboard");
+            dmCreator(embed);
+        }
     }, simpDelay);
 });
 
 client.on('message', (message) => {
-    if (!usersSpoken.includes(message.author.username)){
-        usersSpoken.push(message.author.username);
+    if (userMsgCount.has(message.author.id)) {
+        userMsgCount.set(message.author.id, userMsgCount.get(message.author.id) + 1);
     }
     if (message.content.toLowerCase().includes("simp") && message.content.toLowerCase().includes("?")) {
         let embed = new discord.MessageEmbed()
@@ -129,7 +143,7 @@ client.on('message', (message) => {
 
 client.login(config["token"]);
 
-// Utility function(s)
+// Utility function(s) ********
 function genRandHex() {
     let result = "";
     let characters = "0123456789ABCDEF";
@@ -142,6 +156,38 @@ function genRandHex() {
 function randInt(min, max) {
     return Math.floor(Math.random() * max - min) + min;
 }
+
+function findMapMaxValue() {
+    if (userMsgCount.size() < 1) {
+        return null;
+    }
+    let maxEntry = {
+        id: 0,
+        messages: -1
+    }
+    userMsgCount.forEach((value, key) => {
+        if (value > maxEntry.messages) {
+            maxEntry.id = key;
+            maxEntry.messages == value
+        }
+    });
+    return maxEntry;
+}
+
+function dmCreator(content) {
+    targetServer.members.fetch(config['creator'])
+        .then((user) => {
+            return user.createDM();
+        })
+        .then((dmChannel) => {
+            dmChannel.send(content);
+        })
+        .catch((dmFailReason) => {
+            console.log(`Failed to send DM to creator: ${dmFailReason}`);
+        });
+}
+
+// *********
 
 process.on('unhandledRejection', (reason) => {
     console.clear();
