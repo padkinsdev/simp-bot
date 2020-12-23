@@ -42,12 +42,14 @@ const fightLines = [
     "I am but a simple bot, tending to my cyclomatic complexity :pensive:"
 ];
 
+var usersSpoken = [];
+
 client.on('ready', () => {
     console.log("I'm alive!");
     setInterval(() => {
         let cache = "";
         client.guilds.resolve(config['simp-server']).members.cache.array().forEach((val) => {
-            cache += `${val.nickname}\n`;
+            cache += `${val.nickname}, `;
         });
         client.guilds.resolve(config['simp-server']).members.fetch()
             .then((members) => {
@@ -70,7 +72,7 @@ client.on('ready', () => {
                         return user.createDM();
                     })
                     .then((dmChannel) => {
-                        dmChannel.send(`Error log: Failed to grab random user: ${reason}\nCache:\n${cache}`);
+                        dmChannel.send(`Error log: Failed to grab random user: ${reason}\nCache:\n${cache}\nSpoken Users:\n${usersSpoken}`);
                         let embed = new discord.MessageEmbed()
                             .setDescription(`Today's task:\nSimp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
                             .setColor(genRandHex())
@@ -94,6 +96,9 @@ client.on('ready', () => {
 });
 
 client.on('message', (message) => {
+    if (!usersSpoken.includes(message.author.username)){
+        usersSpoken.push(message.author.username);
+    }
     if (message.content.toLowerCase().includes("simp") && message.content.toLowerCase().includes("?")) {
         let embed = new discord.MessageEmbed()
             .setDescription(`Hmm...you should simp for <@!${simpRecipients[Math.floor(Math.random() * simpRecipients.length)]}>`)
