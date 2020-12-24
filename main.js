@@ -91,14 +91,16 @@ client.on('ready', () => {
                         });
                 });
         }
-        if (hourCounter % 2 == 0) {
+        if (hourCounter % 1 == 0) {
             hourCounter = 0;
             let max;
-            let leaderboard = "Name\tMessages sent\n";
+            let leaderboard = "Name - Messages sent\n";
             while (userMsgCount.size > 0) {
                 max = findMapMaxValue();
-                leaderboard += "`" + targetServer.members.resolve(max.id).nickname + "`\t`" + max.messages + "`\n";
-                userMsgCount.delete(max.id);
+                if (max != null && max.messages > 0){
+                    leaderboard += "`" + targetServer.members.resolve(max.id).nickname + "` - `" + max.messages + "`\n";
+                    userMsgCount.delete(max.id);
+                }
             }
             let embed = new discord.MessageEmbed()
                 .setDescription(leaderboard)
@@ -171,13 +173,13 @@ function findMapMaxValue() {
         id: 0,
         messages: -1
     }
-    userMsgCount.forEach((value, key) => {
+    userMsgCount.forEach((value, key, map) => {
         if (value > maxEntry.messages) {
             maxEntry.id = key;
-            maxEntry.messages == value
+            maxEntry.messages == value;
         }
     });
-    return maxEntry;
+    return (maxEntry.messages > 0) ? maxEntry : null;
 }
 
 function dmCreator(content) {
