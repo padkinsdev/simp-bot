@@ -54,10 +54,10 @@ client.on('ready', () => {
         hourCounter++;
         if (hourCounter % 3 == 0) {
             let cache = "";
-            client.guilds.resolve(config['simp-server']).members.cache.array().forEach((val) => {
+            targetServer.members.cache.array().forEach((val) => {
                 cache += `${val.nickname}, `;
             });
-            client.guilds.resolve(config['simp-server']).members.fetch()
+            targetServer.members.fetch()
                 .then((members) => {
                     let embed = new discord.MessageEmbed()
                         .setColor(genRandHex())
@@ -107,12 +107,17 @@ client.on('ready', () => {
                 .setTitle("Leaderboard");
             dmCreator(embed);
         }
+        if (hourCounter >= 23) {
+            hourCounter = 0;
+        }
     }, simpDelay);
 });
 
 client.on('message', (message) => {
     if (userMsgCount.has(message.author.id)) {
         userMsgCount.set(message.author.id, userMsgCount.get(message.author.id) + 1);
+    } else {
+        userMsgCount.set(message.author.id, 1);
     }
     if (message.content.toLowerCase().includes("simp") && message.content.toLowerCase().includes("?")) {
         let embed = new discord.MessageEmbed()
