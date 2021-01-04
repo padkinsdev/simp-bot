@@ -199,12 +199,12 @@ function dmCreator(content) {
 
 process.on('unhandledRejection', (reason) => {
     console.clear();
-    console.log(`Unhandle rejection: ${reason}`)
+    dmCreator(`Unhandle rejection: ${reason}`);
     client.destroy();
 });
 
 process.on('uncaughtException', (err) => {
     console.clear();
-    console.log(`Unhandled Exception: ${err}`);
+    dmCreator(`Unhandled Exception: ${err}`);
     client.destroy();
 });
