@@ -45,15 +45,19 @@ const fightLines = [
 var userMsgCount = new Map();
 var hourCounter = 0;
 var targetServer, simpChannel;
-var arbitraryCounter = 0;
 
 client.on('ready', () => {
     targetServer = client.guilds.resolve(config["simp-server"]);
     simpChannel = targetServer.channels.resolve(config["simp-channel"]);
     console.log("I'm alive!");
     setInterval(() => {
-        dmCreator(arbitraryCounter);
-        arbitraryCounter++;
+        let leaderboard = generateLeaderboard();
+        let embed = new discord.MessageEmbed()
+            .setDescription(leaderboard)
+            .setColor(genRandHex())
+            .setThumbnail("https://i2.wp.com/pa1.narvii.com/6119/bd51869c9e3bb834571359421c78495c421e7b03_hq.gif")
+            .setTitle("Leaderboard");
+        dmCreator(embed);
     }, 1200000);
     setInterval(() => {
         hourCounter++;
@@ -198,6 +202,19 @@ function dmCreator(content) {
         .catch((dmFailReason) => {
             console.log(`Failed to send DM to creator: ${dmFailReason}`);
         });
+}
+
+function generateLeaderboard() {
+    let max;
+    let leaderboard = "Name - Messages sent\n";
+    while (userMsgCount.size > 0) {
+        max = findMapMaxValue();
+        if (max != null && max.messages > 0){
+            leaderboard += "`" + targetServer.members.resolve(max.id).nickname + "` - `" + max.messages + "`\n";
+            userMsgCount.delete(max.id);
+        }
+    }
+    return leaderboard;
 }
 
 // *********
