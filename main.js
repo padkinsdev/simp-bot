@@ -208,6 +208,7 @@ function generateLeaderboard() {
     let max;
     let leaderboard = "Name - Messages sent\n";
     while (userMsgCount.size > 0) {
+        console.log(userMsgCount.size);
         max = findMapMaxValue();
         if (max != null && max.messages > 0){
             leaderboard += "`" + targetServer.members.resolve(max.id).nickname + "` - `" + max.messages + "`\n";
