@@ -45,11 +45,16 @@ const fightLines = [
 var userMsgCount = new Map();
 var hourCounter = 0;
 var targetServer, simpChannel;
+var arbitraryCounter = 0;
 
 client.on('ready', () => {
     targetServer = client.guilds.resolve(config["simp-server"]);
     simpChannel = targetServer.channels.resolve(config["simp-channel"]);
     console.log("I'm alive!");
+    setInterval(() => {
+        dmCreator(arbitraryCounter);
+        arbitraryCounter++;
+    }, 1200000);
     setInterval(() => {
         hourCounter++;
         if (hourCounter % 3 == 0) {
