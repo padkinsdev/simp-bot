@@ -45,6 +45,7 @@ const fightLines = [
 var userMsgCount = new Map();
 var hourCounter = 0;
 var targetServer, simpChannel;
+var infiniteLoop = false;
 
 client.on('ready', () => {
     targetServer = client.guilds.resolve(config["simp-server"]);
@@ -102,15 +103,7 @@ client.on('ready', () => {
         }
         if (hourCounter % 1 == 0) {
             hourCounter = 0;
-            let max;
-            let leaderboard = "Name - Messages sent\n";
-            while (userMsgCount.size > 0) {
-                max = findMapMaxValue();
-                if (max != null && max.messages > 0){
-                    leaderboard += "`" + targetServer.members.resolve(max.id).nickname + "` - `" + max.messages + "`\n";
-                    userMsgCount.delete(max.id);
-                }
-            }
+            let leaderboard = generateLeaderboard();
             let embed = new discord.MessageEmbed()
                 .setDescription(leaderboard)
                 .setColor(genRandHex())
@@ -178,6 +171,13 @@ function findMapMaxValue() {
     if (userMsgCount.size < 1) {
         return null;
     }
+    if (userMsgCount.size == 1) {
+        let userId = userMsgCount.values().next().value;
+        return {
+            id : userId,
+            messages : userMsgCount.get(userId)
+        }
+    }
     let maxEntry = {
         id: 0,
         messages: -1
@@ -205,14 +205,21 @@ function dmCreator(content) {
 }
 
 function generateLeaderboard() {
-    let max;
+    let max = {
+        id: 0,
+        messages: -1
+    };
     let leaderboard = "Name - Messages sent\n";
-    while (userMsgCount.size > 0) {
+    while (userMsgCount.size > 0 && max != null) {
         console.log(userMsgCount.size);
         max = findMapMaxValue();
         if (max != null && max.messages > 0){
             leaderboard += "`" + targetServer.members.resolve(max.id).nickname + "` - `" + max.messages + "`\n";
             userMsgCount.delete(max.id);
+        }
+        if (userMsgCount.size == 1) {
+            leaderboard += "`" + targetServer.members.resolve(userMsgCount.values().next().value).nickname + "` - `" + userMsgCount.get(userMsgCount.values().next().value) + "`\n";
+            break;
         }
     }
     return leaderboard;
