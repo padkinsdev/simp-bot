@@ -1,14 +1,12 @@
 {
     "main": "./index.js",
     "scripts": {
-        "start": "node ./main.js",
-        "test": "jest"
+        "start": "node ./main.js"
     },
     "engines": {
         "node": "12.18.3"
     },
     "dependencies": {
-        "discord.js": "^12.4.1",
-        "node-cron": "^2.0.3"
+        "discord.js": "^12.4.1"
     }
 }

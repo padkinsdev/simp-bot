@@ -1,0 +1,36 @@
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+ERROR: Error while running task: TypeError: funcString.strip is not a function
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+ERROR: Error while running task: SyntaxError: Illegal return statement
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+ERROR: Error while running task: SyntaxError: Illegal return statement
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
+DEBUG: Creating new Task object for function sayHello
+WARN: Task of type object passed to TaskList object constructor
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 05 2021.txt
