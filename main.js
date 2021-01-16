@@ -1,5 +1,6 @@
 const discord = require('discord.js');
 const config = require('./config.json');
+const simpUtils = require('./src/util/simp-utils');
 
 const client = new discord.Client();
 var simpChannel, targetServer;
@@ -20,9 +21,31 @@ client.on('message', (message) => {
     if (message.content.includes("simp") && message.content.includes("?")) {
         message.channel.send("I'm taking a break for now! Sorry. You can go bully Kate for taking me down if you want to.");
     }
+    if (message.content.includes(config["prefix"])) {
+        if (!(message.channel.id == config["simp-channel"] || message.channel.type == "dm")) {
+            return;
+        }
+        if (message.content.includes("get_members")) {
+            simpUtils.stringifyMembers(targetServer)
+            .then((members) => {
+                let embed = new discord.MessageEmbed()
+                .setDescription(`${members}`)
+                .setColor(genRandHex())
+                .setThumbnail(config["command-img-url"])
+                .setTitle(`Users`);
+                message.channel.send(embed);
+            })
+            .catch((error) => {
+                message.channel.send(`Error while fetching users: ${error}`);
+            })
+        }
+    }
 });
 
 client.on('guildMemberRemove', (member) => {
+    if (!(member.guild.id == config["simp-server"])) {
+        return;
+    }
     let embed = new discord.MessageEmbed()
     .setDescription(`${member.nickname} has left. We'll miss you!`)
     .setColor(genRandHex())
@@ -32,6 +55,9 @@ client.on('guildMemberRemove', (member) => {
 });
 
 client.on('guildMemberAdd', (member) => {
+    if (!(member.guild.id == config["simp-server"])) {
+        return;
+    }
     let embed = new discord.MessageEmbed()
     .setDescription(`${member.nickname} has joined the server. Welcome!`)
     .setColor(genRandHex())
