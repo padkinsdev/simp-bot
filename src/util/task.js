@@ -1,4 +1,5 @@
 const logging = require('./logging');
+const main = require('../../main');
 
 class Task {
     constructor(name, interval, func, ...args) {
@@ -7,7 +8,7 @@ class Task {
         this.elapsedTimeSinceLastRun = 0;
         this.func = func;
         if (args.length != func.length){
-           logging.Logger.write_once_to_log("warn", `Function ${func.name} takes ${func.length} arguments, but ${args.length} arguments were provided in Task object instantiation`);
+           main.logger.warn(`Function ${func.name} takes ${func.length} arguments, but ${args.length} arguments were provided in Task object instantiation`);
         }
         this.funcArgs = args;
     }
@@ -16,7 +17,7 @@ class Task {
         try {
             this.func(...this.funcArgs);
         } catch (err) {
-            this.logger.error(`Error while running task ${this.func.name}: ${err}`);
+            main.logger.error(`Error while running task ${this.func.name}: ${err}`);
         }
     }
 }
