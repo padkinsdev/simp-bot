@@ -2,7 +2,7 @@ const discord = require('discord.js');
 const config = require('./config.json');
 const simpUtils = require('./src/util/simp-utils');
 
-const botIntents = new discord.Intents([discord.Intents.NON_PRIVILEGED, discord.Intents.FLAGS.GUILD_MEMBERS])
+const botIntents = new discord.Intents([discord.Intents.NON_PRIVILEGED, discord.Intents.FLAGS.GUILD_MEMBERS]);
 
 const client = new discord.Client({
     ws: {
@@ -19,11 +19,7 @@ client.on('ready', () => {
 
 client.on('message', (message) => {
     if (!(message.channel.id == simpChannel.id || message.channel.type == "dm")) {
-        console.log(`${message.channel.id} ${message.channel.type}`);
         return;
-    }
-    if (message.content.toLowerCase().includes("ping")) {
-        message.channel.send("Pong!")
     }
     if (message.content.includes("simp") && message.content.includes("?")) {
         message.channel.send("I'm taking a break for now! Sorry. You can go bully Kate for taking me down if you want to.");
@@ -42,6 +38,8 @@ client.on('message', (message) => {
             .catch((error) => {
                 message.channel.send(`Error while fetching users: ${error}`);
             })
+        } else if (message.content.includes("ping")) {
+            message.channel.send("Pong!");
         }
     }
 });
