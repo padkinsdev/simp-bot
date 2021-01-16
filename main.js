@@ -20,7 +20,7 @@ var targetServer = null;
 var simpChannel = null;
 
 client.on('ready', () => {
-    targetServer = main.client.guilds.resolve(config["simp-server"]);
+    targetServer = client.guilds.resolve(config["simp-server"]);
     simpChannel = targetServer.channels.resolve(config["simp-channel"]);
     taskLoop = initTasks.initTaskLoop();
     console.log("Up and running!");
