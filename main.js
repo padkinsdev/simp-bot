@@ -19,6 +19,7 @@ const client = new discord.Client({
 
 client.on('ready', () => {
     taskLoop = initTasks.initTaskLoop();
+    messageUtils.init();
     console.log("Up and running!");
 });
 

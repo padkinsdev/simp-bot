@@ -1,8 +1,13 @@
 const config = require('../../config.json');
 const main = require('../../main');
 
-const targetServer = main.client.guilds.resolve(config["simp-server"]);
-const simpChannel = targetServer.channels.resolve(config["simp-channel"]);
+var targetServer = null;
+var simpChannel = null;
+
+function init() {
+    targetServer = main.client.guilds.resolve(config["simp-server"]);
+    simpChannel = targetServer.channels.resolve(config["simp-channel"]);
+}
 
 function dmCreator(content) {
     targetServer.members.fetch(config['creator'])
@@ -26,5 +31,7 @@ function simpChannelSend(content) {
 
 exports.targetServer = targetServer;
 exports.simpChannel = simpChannel;
+
+exports.init = init;
 exports.dmCreator = dmCreator;
 exports.simpChannelSend = simpChannelSend;
