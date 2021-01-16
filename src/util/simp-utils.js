@@ -7,7 +7,9 @@ function stringifyMembers(guild) {
         .then((members) => {
             members = members.array();
             members.forEach((member) => {
-                memberString += `${member.nickname}; `;
+                if (member.user.username != null) {
+                    memberString += `${member.user.username}\n`;
+                }
             });
             resolve(memberString);
         })
