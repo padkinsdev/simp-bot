@@ -12,7 +12,7 @@ client.on('ready', () => {
 });
 
 client.on('message', (message) => {
-    if (!message.channel.id == simpChannel.id) {
+    if (!(message.channel.id == simpChannel.id || message.channel.type == "dm")) {
         return;
     }
     if (message.content.toLowerCase().includes("ping")) {
@@ -22,9 +22,6 @@ client.on('message', (message) => {
         message.channel.send("I'm taking a break for now! Sorry. You can go bully Kate for taking me down if you want to.");
     }
     if (message.content.includes(config["prefix"])) {
-        if (!(message.channel.id == config["simp-channel"] || message.channel.type == "dm")) {
-            return;
-        }
         if (message.content.includes("get_members")) {
             simpUtils.stringifyMembers(targetServer)
             .then((members) => {
