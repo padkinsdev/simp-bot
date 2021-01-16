@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const config = require('./config.json');
 const simpUtils = require('./src/util/simp-utils');
-const messageUtils = require('./src/util/message-utils');
+var messageUtils = null;
 const initTasks = require('./src/scheduling/init-task-loop');
 const logging = require('./src/util/logging');
 
@@ -19,6 +19,7 @@ const client = new discord.Client({
 
 client.on('ready', () => {
     taskLoop = initTasks.initTaskLoop();
+    messageUtils = require('./src/util/message-utils');
     messageUtils.init();
     console.log("Up and running!");
 });
@@ -27,9 +28,11 @@ client.on('message', (message) => {
     if (!(message.channel.id == messageUtils.simpChannel.id || message.channel.type == "dm")) {
         return;
     }
+    /*
     if (message.content.includes("simp") && message.content.includes("?")) {
         message.channel.send("I'm taking a break for now! Sorry. You can go bully Kate for taking me down if you want to.");
     }
+    */
     if (message.content.includes(config["prefix"])) {
         if (message.content.includes("get_members") && message.author.id == config["creator"]) {
             simpUtils.stringifyMembers(messageUtils.targetServer)
