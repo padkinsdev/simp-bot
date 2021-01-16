@@ -14,6 +14,7 @@ class TaskLoop {
         this.loop = setInterval(() => {
             this.tasks.forEach((task) => {
                 if (task.elapsedTimeSinceLastRun + this.loopInterval >= task.interval) {
+                    this.logger.debug(`Running task ${task.name}`);
                     task.run();
                     task.elapsedTimeSinceLastRun = 0;
                 } else {

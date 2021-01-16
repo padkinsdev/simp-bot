@@ -3,7 +3,7 @@
     "simp-server": "767897022656413716",
     "simp-channel": "777019606672867368",
     "creator": "204035386689716225",
-    "task-loop-interval" : 60000,
+    "task-loop-interval" : 500,
     "prefix" : "s.",
     "command-img-url" : "http://frozenframe.tech/v1/preview4.png"
 }
