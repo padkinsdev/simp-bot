@@ -25,6 +25,7 @@ client.on('ready', () => {
 });
 
 client.on('message', (message) => {
+    console.log(message.author.id);
     if (!(message.channel.id == messageUtils.simpChannel.id || message.channel.type == "dm")) {
         return;
     }
