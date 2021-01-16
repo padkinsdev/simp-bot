@@ -42,6 +42,7 @@ class Logger {
     }
 
     write_to_log(data) {
+        data = `${new Date().toUTCString()} || ${data}`;
         if (this.readyToWriteToFile){
             if (this.messageBacklog != []){
                 let tempBacklog = this.messageBacklog;

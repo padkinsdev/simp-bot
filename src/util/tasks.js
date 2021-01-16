@@ -29,6 +29,9 @@ class Task {
         }
 
         for (let i=0; i < cronSplit.length; i++) {
+            if (cronSplit[i].includes('/')) {
+                cronSplit[i] = cronSplit[i].slice(2);
+            }
             if (isNaN(cronSplit[i]) && cronSplit[i] != "*") {
                 logger.warn(`Value at position ${i} in cron string ${cronString} is not a number or *, and will be replaced with *`);
                 cronSplit[i] = "*";
@@ -122,10 +125,14 @@ class Task {
 
 class TaskList {
     constructor(...args) {
+        logger.debug("Creating new TaskList object");
         this.tasks = [];
         args.forEach((value) => {
-            if (!(typeof value === "function")){
+            if (!(typeof value === "object")){
                 logger.warn(`Task of type ${typeof value} passed to TaskList object constructor`);
+            }
+            if (!(value instanceof Task)){
+                logger.warn(`Task passed to TaskList object constructor is not a Task object`);
             }
             this.tasks.push(value);
         });
@@ -133,21 +140,47 @@ class TaskList {
     }
 
     runLoop() {
-        setInterval(this.loopActivity, config['task-loop-interval']);
+        logger.info("Initiating task list loop");
+        console.log(`Elapsed time: ${this.elapsedTime}`);
+        setInterval(this.loopActivity(this), config['task-loop-interval']);
     }
 
-    loopActivity() { // a single iteration of the schedule loop
-        this.tasks.forEach((value, index) => {
-            if (this.validTimeToRun(value.cronString)) {
+    loopActivity(taskList) { // a single iteration of the schedule loop
+        console.log(`Elapsed time: ${taskList.elapsedTime}`);
+        taskList.tasks.forEach((value, index) => {
+            if (taskList.validTimeToRun(value.cronString)) {
                 value.run();
             }
         });
-        this.elapsedTime += parseInt(config['task-loop-interval']);
+        taskList.elapsedTime += parseInt(config['task-loop-interval']);
     }
 
     validTimeToRun(cronString) {
         // checks if a single task should be run
-        // TODO: this (lol)
+        let chunks = cronString.split(' ');
+        let now = new Date();
+        let nowVals = [now.getSeconds(), now.getMinutes(), now.getHours(), now.getDate(), now.getMonth(), now.getDay()];
+
+        if (chunks.length != 6) {
+            logger.error(`Invalid cron string. Expected 6, got: ${chunks.length}`);
+            return false;
+        }
+
+        let checksPassed = 0;
+
+        for (let i=0; i < 6; i++){
+            if (chunks[i] == "*") {
+                checksPassed++;
+            } else if (chunks[i].includes('/')) {
+                chunks[i] = chunks[i].slice(2);
+                if (nowVals[i] % parseInt(chunks[i]) == 0) {
+                    checksPassed++;
+                }
+            } else if (parseInt(chunks[i]) == nowVals[i]) {
+                checksPassed++;
+            }
+        }
+        return checksPassed == 6;
     }
 }
 

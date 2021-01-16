@@ -1,0 +1,3 @@
+DEBUG: Creating new Task object for function sayHello
+WARN: Task of type object passed to TaskList object constructor
+DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Tue Jan 12 2021.txt

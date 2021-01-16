@@ -1,0 +1,20 @@
+Wed, 13 Jan 2021 05:27:33 GMT || DEBUG: Creating new Task object for function sayHello
+Wed, 13 Jan 2021 05:27:33 GMT || DEBUG: Creating new TaskList object
+Wed, 13 Jan 2021 05:27:33 GMT || INFO: Initiating task list loop
+Wed, 13 Jan 2021 05:27:33 GMT || DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Wed Jan 13 2021.txt
+Wed, 13 Jan 2021 05:29:43 GMT || DEBUG: Creating new Task object for function sayHello
+Wed, 13 Jan 2021 05:29:43 GMT || DEBUG: Creating new TaskList object
+Wed, 13 Jan 2021 05:29:43 GMT || INFO: Initiating task list loop
+Wed, 13 Jan 2021 05:29:43 GMT || DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Wed Jan 13 2021.txt
+Wed, 13 Jan 2021 05:31:55 GMT || DEBUG: Creating new Task object for function sayHello
+Wed, 13 Jan 2021 05:31:55 GMT || DEBUG: Creating new TaskList object
+Wed, 13 Jan 2021 05:31:55 GMT || INFO: Initiating task list loop
+Wed, 13 Jan 2021 05:31:55 GMT || DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Wed Jan 13 2021.txt
+Wed, 13 Jan 2021 05:38:08 GMT || DEBUG: Creating new Task object for function sayHello
+Wed, 13 Jan 2021 05:38:08 GMT || DEBUG: Creating new TaskList object
+Wed, 13 Jan 2021 05:38:08 GMT || INFO: Initiating task list loop
+Wed, 13 Jan 2021 05:38:08 GMT || DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Wed Jan 13 2021.txt
+Wed, 13 Jan 2021 05:40:14 GMT || DEBUG: Creating new Task object for function sayHello
+Wed, 13 Jan 2021 05:40:14 GMT || DEBUG: Creating new TaskList object
+Wed, 13 Jan 2021 05:40:14 GMT || INFO: Initiating task list loop
+Wed, 13 Jan 2021 05:40:14 GMT || DEBUG: Successfully created new Logger object pointing to ./logs/serverlog_Wed Jan 13 2021.txt
