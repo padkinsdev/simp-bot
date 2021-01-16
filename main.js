@@ -3,7 +3,6 @@ const fs = require('fs');
 
 const config = require('./config.json');
 const simpUtils = require('./src/util/simp-utils');
-var messageUtils = null;
 const initTasks = require('./src/scheduling/init-task-loop');
 const logging = require('./src/util/logging');
 
@@ -17,16 +16,18 @@ const client = new discord.Client({
     }
 });
 
+var targetServer = null;
+var simpChannel = null;
+
 client.on('ready', () => {
+    targetServer = main.client.guilds.resolve(config["simp-server"]);
+    simpChannel = targetServer.channels.resolve(config["simp-channel"]);
     taskLoop = initTasks.initTaskLoop();
-    messageUtils = require('./src/util/message-utils');
-    messageUtils.init();
     console.log("Up and running!");
 });
 
 client.on('message', (message) => {
-    console.log(message.author.id);
-    if (!(message.channel.id == messageUtils.simpChannel.id || message.channel.type == "dm")) {
+    if (!(message.channel.id == simpChannel.id || message.channel.type == "dm")) {
         return;
     }
     /*
@@ -36,7 +37,7 @@ client.on('message', (message) => {
     */
     if (message.content.includes(config["prefix"])) {
         if (message.content.includes("get_members") && message.author.id == config["creator"]) {
-            simpUtils.stringifyMembers(messageUtils.targetServer)
+            simpUtils.stringifyMembers(targetServer)
             .then((members) => {
                 let embed = new discord.MessageEmbed()
                 .setDescription(`${members}`)
@@ -65,7 +66,7 @@ client.on('guildMemberRemove', (member) => {
     .setColor(genRandHex())
     .setThumbnail("https://i.pinimg.com/originals/3c/de/3e/3cde3e1fe79e02abdc287395f57d8578.gif")
     .setTitle(`${member.nickname} has left...`);
-    messageUtils.simpChannelSend(embed);
+    simpChannel.send(embed);
 });
 
 client.on('guildMemberAdd', (member) => {
@@ -77,7 +78,7 @@ client.on('guildMemberAdd', (member) => {
     .setColor(genRandHex())
     .setThumbnail("https://media1.tenor.com/images/4db088cfc73a5ee19968fda53be6b446/tenor.gif")
     .setTitle(`${member.nickname} has joined!`);
-    messageUtils.simpChannelSend(embed);
+    simpChannel.send(embed);
 });
 
 client.login(config['token']);
@@ -101,6 +102,19 @@ function genRandHex() {
         result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return '0x' + result;
+}
+
+function dmCreator(content) {
+    targetServer.members.fetch(config['creator'])
+    .then((user) => {
+        return user.createDM();
+    })
+    .then((dmChannel) => {
+        dmChannel.send(content);
+    })
+    .catch((dmFailReason) => {
+        console.log(`Failed to send DM to creator: ${dmFailReason}`);
+    });
 }
 
 exports.client = client;
