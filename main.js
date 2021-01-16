@@ -13,6 +13,7 @@ client.on('ready', () => {
 
 client.on('message', (message) => {
     if (!(message.channel.id == simpChannel.id || message.channel.type == "dm")) {
+        console.log(`${message.channel.id} ${message.channel.type}`);
         return;
     }
     if (message.content.toLowerCase().includes("ping")) {

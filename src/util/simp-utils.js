@@ -1,7 +1,9 @@
 function stringifyMembers(guild) {
     return new Promise((resolve, reject) => {
         let memberString = "";
-        guild.members.fetch()
+        guild.members.fetch({
+            force: true
+        })
         .then((members) => {
             members = members.array();
             members.forEach((member) => {
