@@ -2,7 +2,13 @@ const discord = require('discord.js');
 const config = require('./config.json');
 const simpUtils = require('./src/util/simp-utils');
 
-const client = new discord.Client();
+const botIntents = new discord.Intents([discord.Intents.NON_PRIVILEGED, discord.Intents.FLAGS.GUILD_MEMBERS])
+
+const client = new discord.Client({
+    ws: {
+        intents: botIntents
+    }
+});
 var simpChannel, targetServer;
 
 client.on('ready', () => {
