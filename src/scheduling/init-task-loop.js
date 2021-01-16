@@ -2,7 +2,7 @@ const task = require('../util/task');
 const taskloop = require('../util/taskloop');
 
 function initTaskLoop() {
-    let taskRunner = new taskloop.TaskLoop([testTask]);
+    let taskRunner = new taskloop.TaskLoop();
     taskFuncs.forEach((curTaskFunc) => {
         taskRunner.addTask(curTaskFunc);
     });
