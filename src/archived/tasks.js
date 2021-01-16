@@ -1,4 +1,4 @@
-const logging = require('./logging');
+const logging = require('../util/logging');
 const config = require('../../config.json');
 
 const logger = new logging.Logger();

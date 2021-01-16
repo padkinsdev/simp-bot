@@ -1,8 +1,10 @@
 const discord = require('discord.js');
 const config = require('./config.json');
 const simpUtils = require('./src/util/simp-utils');
+const initTasks = require('./src/scheduling/init-task-loop');
 
 const botIntents = new discord.Intents([discord.Intents.NON_PRIVILEGED, discord.Intents.FLAGS.GUILD_MEMBERS]);
+var taskLoop = null;
 
 const client = new discord.Client({
     ws: {
@@ -13,7 +15,8 @@ var simpChannel, targetServer;
 
 client.on('ready', () => {
     targetServer = client.guilds.resolve(config["simp-server"]);
-    simpChannel = targetServer.channels.resolve(config["simp-channel"])
+    simpChannel = targetServer.channels.resolve(config["simp-channel"]);
+    taskLoop = initTasks.initTaskLoop();
     console.log("Up and running!");
 });
 
@@ -79,4 +82,17 @@ function genRandHex() {
         result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return '0x' + result;
+}
+
+function dmCreator(content) {
+    targetServer.members.fetch(config['creator'])
+    .then((user) => {
+        return user.createDM();
+    })
+    .then((dmChannel) => {
+        dmChannel.send(content);
+    })
+    .catch((dmFailReason) => {
+        console.log(`Failed to send DM to creator: ${dmFailReason}`);
+    });
 }

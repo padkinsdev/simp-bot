@@ -41,6 +41,27 @@ class Logger {
         });
     }
 
+    static write_once_to_log(level, content, path=`./logs/serverlog_${new Date().toDateString()}.txt`) {
+        let logger = new Logger(path);
+        switch (level) {
+            case "debug":
+                logger.debug(content);
+                break;
+            case "info":
+                logger.info(content);
+                break;
+            case "warn":
+                logger.warn(content);
+                break;
+            case "error":
+                logger.error(content);
+                break;
+            case "fatal":
+                logger.fatal(content);
+                break;
+        }
+    }
+
     write_to_log(data) {
         data = `${new Date().toUTCString()} || ${data}`;
         if (this.readyToWriteToFile){
