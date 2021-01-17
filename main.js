@@ -106,7 +106,7 @@ client.on('message', (message) => {
             );
             message.channel.send(embed);
         } else if (message.content.includes("member_stats")) {
-            if (message.mentions.members.array().length < 1) {
+            if (message.mentions.members == null || message.mentions.members.array().length < 1) {
                 // Get info about message author
                 targetServer.members.fetch(message.author)
                 .then((member) => {
