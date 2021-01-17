@@ -125,6 +125,7 @@ client.on('message', (message) => {
                         `**Display Name:** ${member.displayName}`+
                         `**Premium Since:** ${member.premiumSince.toUTCString()}`
                     );
+                    message.channel.send(embed);
                 })
                 .catch((err) => {
                     logger.error(`Error while fetching user ${message.author.username}: ${err}`);
