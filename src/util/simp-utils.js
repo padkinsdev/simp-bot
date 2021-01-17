@@ -1,9 +1,7 @@
 function stringifyMembers(guild) {
     return new Promise((resolve, reject) => {
         let memberString = "";
-        guild.members.fetch({
-            force: true
-        })
+        guild.members.fetch()
         .then((members) => {
             members = members.array();
             members.forEach((member) => {
@@ -19,4 +17,21 @@ function stringifyMembers(guild) {
     });
 }
 
+function getRandomUser(guild) {
+    return new Promise((resolve, reject) => {
+        guild.members.fetch()
+        .then((members) => {
+            resolve(members.array()[randint(0, members.length)]);
+        })
+        .catch((err) => {
+            reject(err);
+        });
+    });
+}
+
+function randInt(min, max) {
+    return Math.floor(Math.random() * max - min) + min;
+}
+
 exports.stringifyMembers = stringifyMembers;
+exports.getRandomUser = getRandomUser;

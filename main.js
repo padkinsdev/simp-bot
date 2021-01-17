@@ -5,6 +5,7 @@ const config = require('./config.json');
 const simpUtils = require('./src/util/simp-utils');
 const initTasks = require('./src/scheduling/init-task-loop');
 const logging = require('./src/util/logging');
+const Task = require('./src/util/task').Task;
 
 const botIntents = new discord.Intents([discord.Intents.NON_PRIVILEGED, discord.Intents.FLAGS.GUILD_MEMBERS]);
 var taskLoop = null;
@@ -117,5 +118,19 @@ function dmCreator(content) {
     });
 }
 
+// Tasks
+function getRandomUserToSimp() {
+    let user = simpUtils.getRandomUser(targetServer);
+    let embed = new discord.MessageEmbed()
+    .setDescription(`Simp for <@!${user.id}>`)
+    .setColor(genRandHex())
+    .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+    .setTitle("Simp Time!");
+    simpChannel.send(embed);
+}
+
 exports.client = client;
 exports.logger = logger;
+exports.tasks = [
+    new Task("simp generator", 10800000, getRandomUserToSimp)
+];
