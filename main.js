@@ -120,7 +120,7 @@ function dmCreator(content) {
 
 // Tasks
 function getRandomUserToSimp() {
-    let user = simpUtils.getRandomUser(targetServer);
+    let user = simpUtils.getRandomUser(targetServer, true);
     let embed = new discord.MessageEmbed()
     .setDescription(`Simp for <@!${user.id}>`)
     .setColor(genRandHex())
