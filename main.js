@@ -142,7 +142,7 @@ client.on('message', (message) => {
                 .setColor(genRandHex())
                 .setTimestamp()
                 .setThumbnail(user.user.avatarURL())
-                .setTitle(`User information for > ${message.author.username} <`)
+                .setTitle(`User information for > ${user.user.username} <`)
                 .setDescription(
                     `**Bot:** ${user.user.bot}\n`+
                     `**Presence:** ${user.user.presence.status}\n`+
