@@ -17,10 +17,13 @@ function stringifyMembers(guild) {
     });
 }
 
-function getRandomUser(guild) {
+function getRandomUser(guild, excludeBots=false) {
     return new Promise((resolve, reject) => {
         guild.members.fetch()
         .then((members) => {
+            if (excludeBots) {
+                members = members.array().filter((member) => !member.bot);
+            }
             resolve(members.array()[randint(0, members.length)]);
         })
         .catch((err) => {
