@@ -73,9 +73,6 @@ client.on('message', (message) => {
                     dmCreator("No logs to display");
                     return;
                 }
-                files.forEach((path) => {
-                    logText += fs.readFileSync(`./logs/${path}`, ).toString();
-                });
                 /*
                 if (logText.length > 2000) {
                     // Only display the last 2000 or so characters
@@ -84,7 +81,7 @@ client.on('message', (message) => {
                 */
                 let embed = new discord.MessageEmbed()
                 .setTimestamp()
-                .attachFiles(logText)
+                .attachFiles(`./logs/${files}`)
                 .setColor(genRandHex())
                 .setTitle("Bot Logs")
                 .setDescription(logText);
