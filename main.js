@@ -132,5 +132,5 @@ function getRandomUserToSimp() {
 exports.client = client;
 exports.logger = logger;
 exports.tasks = [
-    new Task("simp generator", 10800000, getRandomUserToSimp)
+    new Task("simp generator", 60000 /*10800000*/, getRandomUserToSimp)
 ];
