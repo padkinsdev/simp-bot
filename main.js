@@ -41,11 +41,6 @@ client.on('message', (message) => {
     if (!(message.channel.id == simpChannel.id || message.channel.type == "dm")) {
         return;
     }
-    /*
-    if (message.content.includes("simp") && message.content.includes("?")) {
-        message.channel.send("I'm taking a break for now! Sorry. You can go bully Kate for taking me down if you want to.");
-    }
-    */
     if (message.content.includes(config["prefix"])) {
         if (message.content.includes("get_members") && message.author.id == config["creator"]) {
             simpUtils.stringifyMembers(targetServer)
@@ -61,7 +56,12 @@ client.on('message', (message) => {
                 message.channel.send(`Error while fetching users: ${error}`);
             })
         } else if (message.content.includes("ping")) {
-            message.channel.send("Pong!");
+            let embed = new discord.MessageEmbed()
+            .setTimestamp()
+            .setColor(genRandHex())
+            .setTitle("Pong!")
+            .setDescription(`:clock1: ${client.ws.ping}, :medical_symbol: ${client.ws.status}, :door: ${client.ws.gateway}`);
+            message.channel.send(embed);
         } else if (message.content.includes("get_logs") && message.author.id == config["creator"]) {
             let logText = "";
             fs.readdir('./logs', (err, files) => {
@@ -73,7 +73,7 @@ client.on('message', (message) => {
                     dmCreator("No logs to display");
                     return;
                 }
-                
+
                 let fullPath = [];
                 files.forEach((file) => {
                     fullPath.push(`./logs/${file}`);
@@ -156,7 +156,7 @@ function getRandomUserToSimp() {
     simpUtils.getRandomUser(targetServer, true)
     .then((user) => {
         let embed = new discord.MessageEmbed()
-        .setDescription(`Simp for <@!${user.id}>\n\n(Please excuse the rushed nature of this embed)`)
+        .setDescription(`Simp for <@!${user.id}>!`)
         .setColor(genRandHex())
         .setImage("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Simp Time!");
