@@ -126,7 +126,7 @@ function getRandomUserToSimp() {
     .setColor(genRandHex())
     .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
     .setTitle("Simp Time!");
-    simpChannel.send(embed);
+    dmCreator(embed);
 }
 
 exports.client = client;
