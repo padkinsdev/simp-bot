@@ -90,9 +90,17 @@ client.on('message', (message) => {
         } else if (message.content.includes("guild_stats")) {
             let embed = new discord.MessageEmbed()
             .setTimestamp()
-            .setTitle(`Guild stats for ${targetServer.name}`)
+            .setTitle(`Guild stats for **${targetServer.name}**`)
             .setColor(genRandHex())
-            .setDescription(`Owner: ${targetServer.owner.username}\nNumber of members: ${targetServer.memberCount}\nPremium Tier: ${targetServer.premiumTier}\nCreated At: ${targetServer.createdAt.toUTCString()}\nDefault Notification Level: ${targetServer.defaultMessageNotifications}`);
+            .setThumbnail(targetServer.iconURL())
+            .setDescription(`Owner: ${targetServer.owner.user.username}\n`+
+            `**Number of members:** ${targetServer.memberCount}\n`+
+            `**Premium Tier:** ${targetServer.premiumTier}\n`+
+            `**Created At:** ${targetServer.createdAt.toUTCString()}\n`+
+            `**Default Notification Level:** ${targetServer.defaultMessageNotifications}`+
+            `**Description:** ${targetServer.description}`+
+            `**MFA Level:** ${targetServer.mfaLevel}`
+            );
             message.channel.send(embed);
         }
     }
