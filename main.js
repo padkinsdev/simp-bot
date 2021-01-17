@@ -43,6 +43,7 @@ client.on('message', (message) => {
     }
     if (message.content.includes(config["prefix"])) {
         if (message.content.includes("get_members") && message.author.id == config["creator"]) {
+            logger.info(`User ${message.author.username} requested member list from channel ${message.channel.id} (${message.channel.name})`);
             simpUtils.stringifyMembers(targetServer)
             .then((members) => {
                 let embed = new discord.MessageEmbed()
@@ -56,6 +57,7 @@ client.on('message', (message) => {
                 message.channel.send(`Error while fetching users: ${error}`);
             })
         } else if (message.content.includes("ping")) {
+            logger.info(`User ${message.author.username} ping-ponged from channel ${message.channel.id} (${message.channel.name}). Ping was ${client.ws.ping} and gateway was ${client.ws.gateway}`);
             let embed = new discord.MessageEmbed()
             .setTimestamp()
             .setColor(genRandHex())
@@ -63,6 +65,7 @@ client.on('message', (message) => {
             .setDescription(`:clock1: ${client.ws.ping}, :medical_symbol: ${client.ws.status}, :door: ${client.ws.gateway}`);
             message.channel.send(embed);
         } else if (message.content.includes("get_logs") && message.author.id == config["creator"]) {
+            logger.info(`User ${message.author.username} requested bot logs from channel ${message.channel.id} (${message.channel.name})`);
             let logText = "";
             fs.readdir('./logs', (err, files) => {
                 if (err) {
@@ -88,6 +91,7 @@ client.on('message', (message) => {
                 dmCreator(embed);
             });
         } else if (message.content.includes("guild_stats") && (message.author.id == config["creator"] || message.author.id == "618320455287177241")) {
+            logger.info(`${message.author.username} requested guild information for ${targetServer.name} from channel ${message.channel.id} (${message.channel.name})`)
             let embed = new discord.MessageEmbed()
             .setTimestamp()
             .setTitle(`Guild stats for > ${targetServer.name} <`)
@@ -106,6 +110,7 @@ client.on('message', (message) => {
             );
             message.channel.send(embed);
         } else if (message.content.includes("member_stats")) {
+            logger.info(`User ${message.author.username} requested user information about themselves from channel ${message.channel.id} (${message.channel.name})`);
             if (message.mentions.members == null || message.mentions.members.array().length < 1) {
                 // Get info about message author
                 targetServer.members.fetch(message.author)
@@ -122,7 +127,7 @@ client.on('message', (message) => {
                         `**Id:** ${message.author.id}\n`+
                         `**Joined At:** ${(member.joinedAt != null) ? member.joinedAt.toUTCString() : "not available"}\n`+
                         `**Display Color:** ${member.displayHexColor}\n`+
-                        `**Display Name:** ${member.displayName}`+
+                        `**Display Name:** ${member.displayName}\n`+
                         `**Premium Since:** ${(member.premiumSince != null) ? member.premiumSince.toUTCString() : "not premium"}`
                     );
                     message.channel.send(embed);
@@ -130,12 +135,32 @@ client.on('message', (message) => {
                 .catch((err) => {
                     logger.error(`Error while fetching user ${message.author.username}: ${err}`);
                 })
+            } else {
+                let user = message.mentions.members.array()[0];
+                logger.info(`User ${message.author.username} requested user information about user ${user.username} from channel ${message.channel.id} (${message.channel.name})`);
+                let embed = new discord.MessageEmbed()
+                .setColor(genRandHex())
+                .setTimestamp()
+                .setThumbnail(user.avatarURL())
+                .setTitle(`User information for > ${message.author.username} <`)
+                .setDescription(
+                    `**Bot:** ${user.user.bot}\n`+
+                    `**Presence:** ${user.user.presence.status}\n`+
+                    `**Avatar URL:** ${user.user.avatarURL({ size: 4096 })}\n`+
+                    `**Id:** ${user.user.id}\n`+
+                    `**Joined At:** ${(user.joinedAt != null) ? user.joinedAt.toUTCString() : "not available"}\n`+
+                    `**Display Color:** ${user.displayHexColor}\n`+
+                    `**Display Name:** ${user.displayName}\n`+
+                    `**Premium Since:** ${(user.premiumSince != null) ? user.premiumSince.toUTCString() : "not premium"}`
+                );
+                message.channel.send(embed);
             }
         }
     }
 });
 
 client.on('guildMemberRemove', (member) => {
+    logger.info(`User ${member.user.username} left guild ${member.guild.name}`);
     if (!(member.guild.id == config["simp-server"])) {
         return;
     }
@@ -148,6 +173,7 @@ client.on('guildMemberRemove', (member) => {
 });
 
 client.on('guildMemberAdd', (member) => {
+    logger.info(`User ${member.user.username} joined guild ${member.guild.name}`);
     if (!(member.guild.id == config["simp-server"])) {
         return;
     }
@@ -179,6 +205,7 @@ function genRandHex() {
     for (var i = 0; i < 6; i++) {
         result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
+    logger.debug(`Generated random hex: 0x${result}`);
     return '0x' + result;
 }
 
@@ -190,6 +217,9 @@ function dmCreator(content) {
     .then((dmChannel) => {
         dmChannel.send(content);
     })
+    .then(() => {
+        logger.debug("Successfully messaged bot creator")
+    })
     .catch((dmFailReason) => {
         console.log(`Failed to send DM to creator: ${dmFailReason}`);
     });
@@ -197,6 +227,7 @@ function dmCreator(content) {
 
 // Tasks
 function getRandomUserToSimp() {
+    logger.debug("Finding random user to simp for..");
     simpUtils.getRandomUser(targetServer, true)
     .then((user) => {
         let embed = new discord.MessageEmbed()
@@ -204,6 +235,7 @@ function getRandomUserToSimp() {
         .setColor(genRandHex())
         .setImage("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Simp Time!");
+        logger.info(`Found random user to simp for: ${user.id} (${user.user.username})`)
         simpChannel.send(embed);
     })
     .catch((err) => {
@@ -212,6 +244,7 @@ function getRandomUserToSimp() {
 }
 
 function uploadLogsToCloud() {
+    logger.info("Uploading logs to cloud...")
     fs.readdir("./logs", (err, files) => {
         if (err) {
             logger.error(err);
@@ -233,7 +266,7 @@ function uploadLogsToCloud() {
                 if (err) {
                     logger.error(`Error while uploading to s3: ${err}`);
                 } else {
-                    logger.info(`Successfully uploaded to s3 at ${data.Location}`);
+                    logger.info(`Successfully uploaded logs to s3 at ${data.Location}`);
                 }
             });
         });
