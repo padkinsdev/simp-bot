@@ -93,13 +93,16 @@ client.on('message', (message) => {
             .setTitle(`Guild stats for **${targetServer.name}**`)
             .setColor(genRandHex())
             .setThumbnail(targetServer.iconURL())
-            .setDescription(`Owner: ${targetServer.owner.user.username}\n`+
+            .setDescription(
+            `**Owner:** ${targetServer.owner.user.username}\n`+
             `**Number of members:** ${targetServer.memberCount}\n`+
             `**Premium Tier:** ${targetServer.premiumTier}\n`+
             `**Created At:** ${targetServer.createdAt.toUTCString()}\n`+
-            `**Default Notification Level:** ${targetServer.defaultMessageNotifications}`+
-            `**Description:** ${targetServer.description}`+
-            `**MFA Level:** ${targetServer.mfaLevel}`
+            `**Default Notification Level:** ${targetServer.defaultMessageNotifications}\n`+
+            `**Description:** ${targetServer.description}\n`+
+            `**MFA Level:** ${targetServer.mfaLevel}\n`+
+            `**Region:** ${targetServer.region}\n`+
+            `**Highest Role:** ${targetServer.roles.highest.name} with color ${targetServer.roles.highest.hexColor}`
             );
             message.channel.send(embed);
         }
