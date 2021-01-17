@@ -123,11 +123,11 @@ function getRandomUserToSimp() {
     simpUtils.getRandomUser(targetServer, true)
     .then((user) => {
         let embed = new discord.MessageEmbed()
-        .setDescription(`Simp for <@!${user.id}>`)
+        .setDescription(`Simp for <@!${user.id}>\n\n(Please excuse the rushed nature of this embed)`)
         .setColor(genRandHex())
         .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Simp Time!");
-        dmCreator(embed);
+        simpChannel.send(embed);
     })
     .catch((err) => {
         logger.error(err);
@@ -137,5 +137,5 @@ function getRandomUserToSimp() {
 exports.client = client;
 exports.logger = logger;
 exports.tasks = [
-    new Task("simp generator", 60000 /*10800000*/, getRandomUserToSimp)
+    new Task("simp generator", 10800000, getRandomUserToSimp)
 ];
