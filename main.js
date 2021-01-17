@@ -120,10 +120,10 @@ client.on('message', (message) => {
                         `**Presence:** ${message.author.presence.status}\n`+
                         `**Avatar URL:** ${message.author.avatarURL({ size: 4096 })}\n`+
                         `**Id:** ${message.author.id}\n`+
-                        `**Joined At:** ${member.joinedAt.toUTCString()}\n`+
+                        `**Joined At:** ${(member.joinedAt != null) ? member.joinedAt.toUTCString() : "not available"}\n`+
                         `**Display Color:** ${member.displayHexColor}\n`+
                         `**Display Name:** ${member.displayName}`+
-                        `**Premium Since:** ${member.premiumSince.toUTCString()}`
+                        `**Premium Since:** ${(member.premiumSince != null) ? member.premiumSince.toUTCString() : "not premium"}`
                     );
                     message.channel.send(embed);
                 })
