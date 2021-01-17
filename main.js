@@ -1,5 +1,6 @@
 const discord = require('discord.js');
 const fs = require('fs');
+const aws = require('aws-sdk');
 
 const config = require('./config.json');
 const simpUtils = require('./src/util/simp-utils');
@@ -7,8 +8,16 @@ const initTasks = require('./src/scheduling/init-task-loop');
 const logging = require('./src/util/logging');
 const Task = require('./src/util/task').Task;
 
+aws.config.update({
+    region: "us-east-1"
+});
+
+aws.config.credentials = {
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+}
+
 const botIntents = new discord.Intents([discord.Intents.NON_PRIVILEGED, discord.Intents.FLAGS.GUILD_MEMBERS]);
-var taskLoop = null;
 const logger = new logging.Logger();
 
 const client = new discord.Client({
@@ -16,6 +25,7 @@ const client = new discord.Client({
         intents: botIntents
     }
 });
+const s3 = new aws.S3();
 
 var targetServer = null;
 var simpChannel = null;
@@ -53,7 +63,33 @@ client.on('message', (message) => {
         } else if (message.content.includes("ping")) {
             message.channel.send("Pong!");
         } else if (message.content.includes("get_logs") && message.author.id == config["creator"]) {
-            messageUtils.dmCreator("No logs to display");
+            let logText = "";
+            fs.readdir('./logs', (err, files) => {
+                if (err) {
+                    dmCreator(`Error while reading log files: ${err}`);
+                    return;
+                }
+                if (files.length < 1) {
+                    dmCreator("No logs to display");
+                    return;
+                }
+                files.forEach((path) => {
+                    logText += fs.readFileSync(`./logs/${path}`, ).toString();
+                });
+                /*
+                if (logText.length > 2000) {
+                    // Only display the last 2000 or so characters
+                    logText = logText.slice(logText.length-2000);
+                }
+                */
+                let embed = new discord.MessageEmbed()
+                .setTimestamp()
+                .attachFiles(logText)
+                .setColor(genRandHex())
+                .setTitle("Bot Logs")
+                .setDescription(logText);
+                dmCreator(embed);
+            });
         }
     }
 });
@@ -125,7 +161,7 @@ function getRandomUserToSimp() {
         let embed = new discord.MessageEmbed()
         .setDescription(`Simp for <@!${user.id}>\n\n(Please excuse the rushed nature of this embed)`)
         .setColor(genRandHex())
-        .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+        .setImage("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
         .setTitle("Simp Time!");
         simpChannel.send(embed);
     })
@@ -134,8 +170,40 @@ function getRandomUserToSimp() {
     })
 }
 
+function uploadLogsToCloud() {
+    fs.readdir("./logs", (err, files) => {
+        if (err) {
+            logger.error(err);
+            return;
+        }
+        files.forEach((file) => {
+            let uploadParams = {
+                Bucket: "faebotwebsite",
+                Key: "simp-bot-logs",
+                Body: ""
+            };
+            let fileStream = fs.createReadStream(`./logs/${file}`);
+            fileStream.on("error", (err) => {
+                console.log(`Error while reading file ${path}: ${err}`);
+            });
+            uploadParams.Body = fileStream;
+            uploadParams.Key = file;
+            s3.upload(uploadParams, (err, data) => {
+                if (err) {
+                    logger.error(`Error while uploading to s3: ${err}`);
+                } else {
+                    logger.info(`Successfully uploaded to s3 at ${data.Location}`);
+                }
+            });
+        });
+    });
+}
+
+// Exports
+
 exports.client = client;
 exports.logger = logger;
 exports.tasks = [
-    new Task("simp generator", 10800000, getRandomUserToSimp)
+    new Task("simp generator", 10800000, getRandomUserToSimp),
+    new Task("upload logs to cloud", 3600000, uploadLogsToCloud)
 ];
