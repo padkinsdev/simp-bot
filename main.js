@@ -92,11 +92,7 @@ client.on('message', (message) => {
             .setTimestamp()
             .setTitle(`Guild stats for ${targetServer.name}`)
             .setColor(genRandHex())
-            .setDescription(```
-            Owner: ${targetServer.owner.username}
-            Number of members: ${targetServer.memberCount}
-            Premium Tier: ${targetServer.premiumTier}
-            ```);
+            .setDescription(`Owner: ${targetServer.owner.username}\nNumber of members: ${targetServer.memberCount}\nPremium Tier: ${targetServer.premiumTier}\nCreated At: ${targetServer.createdAt.toUTCString()}\nDefault Notification Level: ${targetServer.defaultMessageNotifications}`);
             message.channel.send(embed);
         }
     }
