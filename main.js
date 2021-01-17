@@ -87,6 +87,17 @@ client.on('message', (message) => {
                 .setDescription(logText);
                 dmCreator(embed);
             });
+        } else if (message.content.includes("guild_stats")) {
+            let embed = new discord.MessageEmbed()
+            .setTimestamp()
+            .setTitle(`Guild stats for ${targetServer.name}`)
+            .setColor(genRandHex())
+            .setDescription(```
+            Owner: ${targetServer.owner.username}
+            Number of members: ${targetServer.memberCount}
+            Premium Tier: ${targetServer.premiumTier}
+            ```);
+            message.channel.send(embed);
         }
     }
 });
