@@ -24,7 +24,7 @@ function getRandomUser(guild, excludeBots=false) {
             if (excludeBots) {
                 members = members.array().filter((member) => !member.bot);
             }
-            resolve(members.array()[randint(0, members.length)]);
+            resolve(members.array()[randInt(0, members.length)]);
         })
         .catch((err) => {
             reject(err);
