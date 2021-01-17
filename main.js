@@ -120,13 +120,18 @@ function dmCreator(content) {
 
 // Tasks
 function getRandomUserToSimp() {
-    let user = simpUtils.getRandomUser(targetServer, true);
-    let embed = new discord.MessageEmbed()
-    .setDescription(`Simp for <@!${user.id}>`)
-    .setColor(genRandHex())
-    .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-    .setTitle("Simp Time!");
-    dmCreator(embed);
+    simpUtils.getRandomUser(targetServer, true)
+    .then((user) => {
+        let embed = new discord.MessageEmbed()
+        .setDescription(`Simp for <@!${user.id}>`)
+        .setColor(genRandHex())
+        .setThumbnail("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
+        .setTitle("Simp Time!");
+        dmCreator(embed);
+    })
+    .catch((err) => {
+        logger.error(err);
+    })
 }
 
 exports.client = client;
