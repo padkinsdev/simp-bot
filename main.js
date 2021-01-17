@@ -141,7 +141,7 @@ client.on('message', (message) => {
                 let embed = new discord.MessageEmbed()
                 .setColor(genRandHex())
                 .setTimestamp()
-                .setThumbnail(user.avatarURL())
+                .setThumbnail(user.user.avatarURL())
                 .setTitle(`User information for > ${message.author.username} <`)
                 .setDescription(
                     `**Bot:** ${user.user.bot}\n`+
