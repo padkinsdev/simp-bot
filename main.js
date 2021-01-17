@@ -87,10 +87,10 @@ client.on('message', (message) => {
                 .setDescription(logText);
                 dmCreator(embed);
             });
-        } else if (message.content.includes("guild_stats")) {
+        } else if (message.content.includes("guild_stats") && (message.author.id == config["creator"] || message.author.id == "618320455287177241")) {
             let embed = new discord.MessageEmbed()
             .setTimestamp()
-            .setTitle(`Guild stats for **${targetServer.name}**`)
+            .setTitle(`Guild stats for > ${targetServer.name} <`)
             .setColor(genRandHex())
             .setThumbnail(targetServer.iconURL())
             .setDescription(
@@ -102,9 +102,34 @@ client.on('message', (message) => {
             `**Description:** ${targetServer.description}\n`+
             `**MFA Level:** ${targetServer.mfaLevel}\n`+
             `**Region:** ${targetServer.region}\n`+
-            `**Highest Role:** ${targetServer.roles.highest.name} with color ${targetServer.roles.highest.hexColor}`
+            `**Highest Role:** ${targetServer.roles.highest.name}, with color ${targetServer.roles.highest.hexColor}`
             );
             message.channel.send(embed);
+        } else if (message.content.includes("member_stats")) {
+            if (message.mentions.members.array().length < 1) {
+                // Get info about message author
+                targetServer.members.fetch(message.author)
+                .then((member) => {
+                    let embed = new discord.MessageEmbed()
+                    .setColor(genRandHex())
+                    .setTimestamp()
+                    .setThumbnail(message.author.avatarURL())
+                    .setTitle(`User information for > ${message.author.username} <`)
+                    .setDescription(
+                        `**Bot:** ${message.author.bot}\n`+
+                        `**Presence:** ${message.author.presence.status}\n`+
+                        `**Avatar URL:** ${message.author.avatarURL({ size: 4096 })}\n`+
+                        `**Id:** ${message.author.id}\n`+
+                        `**Joined At:** ${member.joinedAt.toUTCString()}\n`+
+                        `**Display Color:** ${member.displayHexColor}\n`+
+                        `**Display Name:** ${member.displayName}`+
+                        `**Premium Since:** ${member.premiumSince.toUTCString()}`
+                    );
+                })
+                .catch((err) => {
+                    logger.error(`Error while fetching user ${message.author.username}: ${err}`);
+                })
+            }
         }
     }
 });
