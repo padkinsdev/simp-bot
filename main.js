@@ -313,7 +313,7 @@ function remindToDrinkWater() {
 exports.client = client;
 exports.logger = logger;
 exports.tasks = [
-    new Task("simp generator", 10800000, getRandomUserToSimp),
-    new Task("upload logs to cloud", 60000/*3600000*/, uploadLogsToCloud)/*,
+    new Task("simp generator", 60000/*10800000*/, getRandomUserToSimp),
+    new Task("upload logs to cloud", 3600000, uploadLogsToCloud)/*,
     new Task("remind everyone to drink water", 60000, remindToDrinkWater)*/
 ];
