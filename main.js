@@ -283,7 +283,7 @@ function remindToDrinkWater() {
             return;
         }
         list = list.Contents;
-        let imageUrl = `https://faebotwebsite.s3.amazonaws.com/wholesome-images/${list[simpUtils.randInt(0, list.length)].Key}`;
+        let imageUrl = `https://faebotwebsite.s3.amazonaws.com/${list[simpUtils.randInt(0, list.length)].Key}`;
         logger.debug(`Image URL for reminder to drink water is ${imageUrl}`);
         let embed = new discord.MessageEmbed()
         .setColor(genRandHex())
