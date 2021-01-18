@@ -285,14 +285,12 @@ function remindToDrinkWater() {
         list = list.Contents;
         let imageUrl = `https://faebotwebsite.s3.amazonaws.com/wholesome-images/${list[simpUtils.randInt(0, list.length)].Key}`;
         logger.debug(`Image URL for reminder to drink water is ${imageUrl}`);
-        /*
         let embed = new discord.MessageEmbed()
         .setColor(genRandHex())
         .setTitle("Drink water! Take your meds!")
         .setDescription("If you haven't had water recently then go drink some! Remember to take breaks, and don't forget that I love you no matter what.")
         .setImage(imageUrl);
-        */
-        //dmCreator(embed);
+        dmCreator(embed);
     });
 }
 
