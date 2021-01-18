@@ -228,19 +228,32 @@ function dmCreator(content) {
 // Tasks
 function getRandomUserToSimp() {
     logger.debug("Finding random user to simp for..");
-    simpUtils.getRandomUser(targetServer, true)
-    .then((user) => {
-        let embed = new discord.MessageEmbed()
-        .setDescription(`Simp for <@!${user.id}>!`)
-        .setColor(genRandHex())
-        .setImage("https://faebotwebsite.s3.amazonaws.com/files/20200904_125435.jpg")
-        .setTitle("Simp Time!");
-        logger.info(`Found random user to simp for: ${user.id} (${user.user.username})`)
-        simpChannel.send(embed);
-    })
-    .catch((err) => {
-        logger.error(err);
-    })
+    s3.listObjectsV2({
+        Bucket: config["files-bucket"],
+        StartAfter: "simp-images"
+    }, (err, list) => {
+        if (err) {
+            logger.error(`Error while fetching simp images file list: ${err}`);
+            return;
+        }
+        list = list.Contents;
+        let imageUrl = `https://faebotwebsite.s3.amazonaws.com/${list[simpUtils.randInt(0, list.length)].Key}`;
+        logger.debug(`Image URL for simp embed is ${imageUrl}`);
+        simpUtils.getRandomUser(targetServer, true)
+        .then((user) => {
+            let embed = new discord.MessageEmbed()
+            .setDescription(`Simp for <@!${user.id}>!`)
+            .setColor(genRandHex())
+            .setImage(imageUrl)
+            .setTitle("Simp Time!");
+            logger.info(`Found random user to simp for: ${user.id} (${user.user.username})`);
+            dmCreator(embed);
+            //simpChannel.send(embed);
+        })
+        .catch((err) => {
+            logger.error(err);
+        });
+    });
 }
 
 function uploadLogsToCloud() {
@@ -274,6 +287,7 @@ function uploadLogsToCloud() {
 }
 
 function remindToDrinkWater() {
+    logger.info("Generating reminder to drink water...");
     s3.listObjectsV2({
         Bucket: config["files-bucket"],
         StartAfter: "wholesome-images"
@@ -300,6 +314,6 @@ exports.client = client;
 exports.logger = logger;
 exports.tasks = [
     new Task("simp generator", 10800000, getRandomUserToSimp),
-    new Task("upload logs to cloud", 3600000, uploadLogsToCloud)/*,
+    new Task("upload logs to cloud", 60000/*3600000*/, uploadLogsToCloud)/*,
     new Task("remind everyone to drink water", 60000, remindToDrinkWater)*/
 ];
