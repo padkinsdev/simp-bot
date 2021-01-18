@@ -274,7 +274,7 @@ function uploadLogsToCloud() {
 }
 
 function remindToDrinkWater() {
-    let listCmd = new s3.listObjectsV2({
+    s3.listObjectsV2({
         Bucket: config["files-bucket"],
         StartAfter: "wholesome-images"
     }, (err, list) => {
