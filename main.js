@@ -247,8 +247,8 @@ function getRandomUserToSimp() {
             .setImage(imageUrl)
             .setTitle("Simp Time!");
             logger.info(`Found random user to simp for: ${user.id} (${user.user.username})`);
-            dmCreator(embed);
-            //simpChannel.send(embed);
+            //dmCreator(embed);
+            simpChannel.send(embed);
         })
         .catch((err) => {
             logger.error(err);
@@ -287,6 +287,10 @@ function uploadLogsToCloud() {
 }
 
 function remindToDrinkWater() {
+    if (simpUtils.randInt(0, 12) != 8) {
+        logger.info("Failed to pass drink water check");
+        return;
+    }
     logger.info("Generating reminder to drink water...");
     s3.listObjectsV2({
         Bucket: config["files-bucket"],
@@ -304,7 +308,8 @@ function remindToDrinkWater() {
         .setTitle("Drink water! Take your meds!")
         .setDescription("If you haven't had water recently then go drink some! Remember to take breaks, and don't forget that I love you no matter what.")
         .setImage(imageUrl);
-        dmCreator(embed);
+        simpChannel.send(embed);
+        //dmCreator(embed);
     });
 }
 
@@ -314,6 +319,6 @@ exports.client = client;
 exports.logger = logger;
 exports.tasks = [
     new Task("simp generator", 10800000, getRandomUserToSimp),
-    new Task("upload logs to cloud", 3600000, uploadLogsToCloud)//,
-    //new Task("remind everyone to drink water", 120000, remindToDrinkWater)
+    new Task("upload logs to cloud", 3600000, uploadLogsToCloud),
+    new Task("remind everyone to drink water", 3600000, remindToDrinkWater)
 ];
