@@ -230,7 +230,7 @@ function getRandomUserToSimp() {
     logger.debug("Finding random user to simp for..");
     s3.listObjectsV2({
         Bucket: config["files-bucket"],
-        StartAfter: "simp-images/"
+        Prefix: "simp-images/"
     }, (err, list) => {
         if (err) {
             logger.error(`Error while fetching simp images file list: ${err}`);
@@ -290,7 +290,7 @@ function remindToDrinkWater() {
     logger.info("Generating reminder to drink water...");
     s3.listObjectsV2({
         Bucket: config["files-bucket"],
-        StartAfter: "wholesome-images/"
+        Prefix: "wholesome-images/"
     }, (err, list) => {
         if (err) {
             logger.error(`Error while fetching wholesome images file list: ${err}`);
@@ -313,7 +313,7 @@ function remindToDrinkWater() {
 exports.client = client;
 exports.logger = logger;
 exports.tasks = [
-    //new Task("simp generator", 60000/*10800000*/, getRandomUserToSimp),
-    new Task("upload logs to cloud", 3600000, uploadLogsToCloud)//,
-    //new Task("remind everyone to drink water", 120000, remindToDrinkWater)
+    new Task("simp generator", 60000/*10800000*/, getRandomUserToSimp),
+    new Task("upload logs to cloud", 3600000, uploadLogsToCloud),
+    new Task("remind everyone to drink water", 120000, remindToDrinkWater)
 ];
