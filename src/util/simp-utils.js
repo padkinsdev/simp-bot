@@ -40,3 +40,4 @@ function randInt(min, max) {
 
 exports.stringifyMembers = stringifyMembers;
 exports.getRandomUser = getRandomUser;
+exports.randInt = randInt;

@@ -252,7 +252,7 @@ function uploadLogsToCloud() {
         }
         files.forEach((file) => {
             let uploadParams = {
-                Bucket: "faebotwebsite",
+                Bucket: config["files-bucket"],
                 Key: "simp-bot-logs",
                 Body: ""
             };
@@ -273,11 +273,33 @@ function uploadLogsToCloud() {
     });
 }
 
+function remindToDrinkWater() {
+    let listCmd = new s3.listObjectsV2({
+        Bucket: config["files-bucket"],
+        StartAfter: "wholesome-images"
+    }, (err, list) => {
+        if (err) {
+            logger.error(`Error while fetching wholesome images file list: ${err}`);
+            return;
+        }
+        list = list.Contents;
+        let imageUrl = `https://faebotwebsite.s3.amazonaws.com/wholesome-images/${list[simpUtils.randInt(0, list.length)]}`;
+        logger.debug(`Image URL for reminder to drink water is ${imageUrl}`);
+        let embed = new discord.MessageEmbed()
+        .setColor(genRandHex())
+        .setTitle("Drink water! Take your meds!")
+        .setDescription("If you haven't had water recently then go drink some! Remember to take breaks, and don't forget that I love you no matter what.")
+        .setImage(imageUrl);
+        dmCreator(embed);
+    });
+}
+
 // Exports
 
 exports.client = client;
 exports.logger = logger;
 exports.tasks = [
     new Task("simp generator", 10800000, getRandomUserToSimp),
-    new Task("upload logs to cloud", 3600000, uploadLogsToCloud)
+    new Task("upload logs to cloud", 3600000, uploadLogsToCloud),
+    new Task("remind everyone to drink water", 30000, remindToDrinkWater)
 ];

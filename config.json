@@ -5,5 +5,6 @@
     "creator": "204035386689716225",
     "task-loop-interval" : 3600000,
     "prefix" : "s.",
-    "command-img-url" : "http://frozenframe.tech/v1/preview4.png"
+    "command-img-url" : "http://frozenframe.tech/v1/preview4.png",
+    "files-bucket": "faebotwebsite"
 }
