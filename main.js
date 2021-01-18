@@ -230,7 +230,7 @@ function getRandomUserToSimp() {
     logger.debug("Finding random user to simp for..");
     s3.listObjectsV2({
         Bucket: config["files-bucket"],
-        StartAfter: "simp-images"
+        StartAfter: "simp-images/"
     }, (err, list) => {
         if (err) {
             logger.error(`Error while fetching simp images file list: ${err}`);
@@ -290,7 +290,7 @@ function remindToDrinkWater() {
     logger.info("Generating reminder to drink water...");
     s3.listObjectsV2({
         Bucket: config["files-bucket"],
-        StartAfter: "wholesome-images"
+        StartAfter: "wholesome-images/"
     }, (err, list) => {
         if (err) {
             logger.error(`Error while fetching wholesome images file list: ${err}`);
