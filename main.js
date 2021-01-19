@@ -165,10 +165,10 @@ client.on('guildMemberRemove', (member) => {
         return;
     }
     let embed = new discord.MessageEmbed()
-    .setDescription(`${member.nickname} has left. We'll miss you!`)
+    .setDescription(`${member.user.username} has left. We'll miss you!`)
     .setColor(genRandHex())
     .setThumbnail("https://i.pinimg.com/originals/3c/de/3e/3cde3e1fe79e02abdc287395f57d8578.gif")
-    .setTitle(`${member.nickname} has left...`);
+    .setTitle(`${member.user.username} has left...`);
     simpChannel.send(embed);
 });
 
@@ -178,10 +178,10 @@ client.on('guildMemberAdd', (member) => {
         return;
     }
     let embed = new discord.MessageEmbed()
-    .setDescription(`${member.nickname} has joined the server. Welcome!`)
+    .setDescription(`${member.user.username} has joined the server. Welcome!`)
     .setColor(genRandHex())
     .setThumbnail("https://media1.tenor.com/images/4db088cfc73a5ee19968fda53be6b446/tenor.gif")
-    .setTitle(`${member.nickname} has joined!`);
+    .setTitle(`${member.user.username} has joined!`);
     simpChannel.send(embed);
 });
 
@@ -287,7 +287,7 @@ function uploadLogsToCloud() {
 }
 
 function remindToDrinkWater() {
-    if (simpUtils.randInt(0, 3) != 1) {
+    if (simpUtils.randInt(0, 6) != 1) {
         logger.info("Failed to pass drink water check");
         return;
     }
@@ -318,7 +318,7 @@ function remindToDrinkWater() {
 exports.client = client;
 exports.logger = logger;
 exports.tasks = [
-    new Task("simp generator", 10800000, getRandomUserToSimp),
+    new Task("simp generator", 21600000, getRandomUserToSimp),
     new Task("upload logs to cloud", 3600000, uploadLogsToCloud),
     new Task("remind everyone to drink water", 3600000, remindToDrinkWater)
 ];
