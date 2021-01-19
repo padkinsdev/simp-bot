@@ -287,7 +287,7 @@ function uploadLogsToCloud() {
 }
 
 function remindToDrinkWater() {
-    if (simpUtils.randInt(0, 12) != 8) {
+    if (simpUtils.randInt(0, 3) != 1) {
         logger.info("Failed to pass drink water check");
         return;
     }
