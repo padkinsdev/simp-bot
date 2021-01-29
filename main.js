@@ -307,9 +307,37 @@ function remindToDrinkWater() {
         .setColor(genRandHex())
         .setTitle("Drink water! Take your meds!")
         .setDescription("If you haven't had water recently then go drink some! Remember to take breaks, and don't forget that I love you no matter what.")
+        .setFooter(":exclamation: Feed me wholesome art! Send art to Kate if you want it to be included in the image pool!")
         .setImage(imageUrl);
         simpChannel.send(embed);
         //dmCreator(embed);
+    });
+}
+
+function getRandomRelationshipImage() {
+    if (simpUtils.randInt(0, 24) != 1) {
+        logger.info("Failed to pass relationship image spawn check");
+        return;
+    }
+    logger.info("Fetching random relationship image...");
+    s3.listObjectsV2({
+        Bucket: config["files-bucket"],
+        Prefix: "relationship-images/"
+    }, (err, list) => {
+        if (err) {
+            logger.error(`Error while fetching relationship images file list: ${err}`);
+            return;
+        }
+        list = list.Contents;
+        let imageUrl = `https://faebotwebsite.s3.amazonaws.com/${list[simpUtils.randInt(0, list.length)].Key}`;
+        logger.debug(`Image URL for relationship image is ${imageUrl}`);
+        let embed = new discord.MessageEmbed()
+        .setColor(genRandHex())
+        .setTitle(`Some serotonin for your troubles?`)
+        .setDescription("Bonus serotonin if you can identify what fandom/series the art is from :grin:")
+        .setFooter(":exclamation: Feed me relationship art! Send art to Kate if you want it to be included in the image pool!")
+        .setImage(imageUrl);
+        simpChannel.send(embed);
     });
 }
 
@@ -319,6 +347,7 @@ exports.client = client;
 exports.logger = logger;
 exports.tasks = [
     new Task("simp generator", 21600000, getRandomUserToSimp),
-    new Task("upload logs to cloud", 3600000, uploadLogsToCloud),
-    new Task("remind everyone to drink water", 3600000, remindToDrinkWater)
+    new Task("upload logs to cloud", 10800000, uploadLogsToCloud),
+    new Task("remind everyone to drink water", 10800000, remindToDrinkWater),
+    new Task("fetch random relationship image", 3600000, getRandomRelationshipImage)
 ];
