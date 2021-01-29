@@ -29,10 +29,12 @@ const s3 = new aws.S3();
 
 var targetServer = null;
 var simpChannel = null;
+var nsfwChannel = null;
 
 client.on('ready', () => {
     targetServer = client.guilds.resolve(config["simp-server"]);
     simpChannel = targetServer.channels.resolve(config["simp-channel"]);
+    nsfwChannel = targetServer.channels.resolve(config["nsfw-channel"]);
     taskLoop = initTasks.initTaskLoop();
     console.log("Up and running!");
 });
@@ -334,10 +336,10 @@ function getRandomRelationshipImage() {
         let embed = new discord.MessageEmbed()
         .setColor(genRandHex())
         .setTitle(`Some serotonin for your troubles?`)
-        .setDescription("Bonus serotonin if you can identify what fandom/series the art is from :grin:")
+        .setDescription("Bonus serotonin if you can identify what fandom/series the art is from :grin:. These are being sent to the nsfw channel just to be safe")
         .setFooter(":exclamation: Feed me relationship art! Send art to Kate if you want it to be included in the image pool!")
         .setImage(imageUrl);
-        simpChannel.send(embed);
+        nsfwChannel.send(embed);
     });
 }
 
