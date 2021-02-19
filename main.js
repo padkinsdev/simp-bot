@@ -317,7 +317,7 @@ function remindToDrinkWater() {
 }
 
 function getRandomRelationshipImage() {
-    if (simpUtils.randInt(0, 8) != 1) {
+    if (simpUtils.randInt(0, 24) != 1) {
         logger.info("Failed to pass relationship image spawn check");
         return;
     }
